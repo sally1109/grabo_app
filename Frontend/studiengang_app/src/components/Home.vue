@@ -5,6 +5,15 @@
     <img src="https://cdn.discordapp.com/attachments/1057666656320618587/1063508132757778512/waage_9.png">
   </header>
   <div class="container_pages">
+    <v-app>
+      <SearchBar />
+
+
+    </v-app>
+    
+    
+    
+    <!--
     <div id="bmi_weight">
       <CurrentWeight v-if="weightData.length > 0 && heightData.length > 0" :weightCurrent=weightData[weightData.length-1]
         :weightOld=weightData[weightData.length-2]>
@@ -27,16 +36,18 @@
     </div>
     <div>
       <AddWeight @weightAdded="addWeight"> </AddWeight>
-    </div>
+    </div>-->
   </div>
 </template>
 
 <script>
+
 import AddWeight from "./AddWeight.vue";
 import WeightChart from "./WeightChart.vue";
 import BMI from "./BMI.vue";
 import CurrentWeight from "./CurrentWeight.vue";
 import axios from "axios";
+import SearchBar from "./SearchBar.vue";
 
 export default {
   name: "Home",
@@ -47,8 +58,9 @@ export default {
     AddWeight,
     WeightChart,
     BMI,
-    CurrentWeight
-  },
+    CurrentWeight,
+    SearchBar
+},
   data: function () {
     return {
       weightData: [],
