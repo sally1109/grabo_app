@@ -7,8 +7,9 @@
   <div class="container_pages">
     <v-app>
       <SearchBar />
-
-
+    </v-app>
+    <v-app>
+      <ListCourse />
     </v-app>
     
     
@@ -48,6 +49,7 @@ import BMI from "./BMI.vue";
 import CurrentWeight from "./CurrentWeight.vue";
 import axios from "axios";
 import SearchBar from "./SearchBar.vue";
+import ListCourse from "./ListCourse.vue";
 
 export default {
   name: "Home",
@@ -59,7 +61,8 @@ export default {
     WeightChart,
     BMI,
     CurrentWeight,
-    SearchBar
+    SearchBar,
+    ListCourse
 },
   data: function () {
     return {
