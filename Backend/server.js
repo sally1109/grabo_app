@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 const fs = require("fs");
 const cors = require("cors");
@@ -14,6 +15,7 @@ function log(req, res, next) {
     next();
 }
 app.use(log);
+app.use(morgan("dev"));
 
 
 //Endpoints
@@ -83,8 +85,9 @@ app.put("/data/:id", function (req, res) {
     fs.readFile(filename2, "utf8", function (err, data) {
         let dataAsObject = JSON.parse(data);
         dataAsObject[req.params.id].name = req.body.name;
-        dataAsObject[req.params.id].height = req.body.height;
-        dataAsObject[req.params.id].age = req.body.age;
+        dataAsObject[req.params.id].bundesland = req.body.bundesland;
+        dataAsObject[req.params.id].nc = req.body.nc;
+
         fs.writeFile(filename2, JSON.stringify(dataAsObject), () => {
             res.writeHead(200, {
                 "Content-Type": "application/json",

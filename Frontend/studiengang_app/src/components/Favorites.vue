@@ -1,7 +1,7 @@
 <template>
   <header>
-    <h3 class="headline_1">Weight</h3>
-    <h1 class="headline_2">History</h1>
+    <h3 class="headline_1">Saved</h3>
+    <h1 class="headline_2">Favorites</h1>
     <img src="https://cdn.discordapp.com/attachments/1057666656320618587/1063508132757778512/waage_9.png">
   </header>
   <div class="container_pages">

@@ -8,8 +8,8 @@
       </v-btn>
       <div id="gap">
         <v-btn icon="history" size="x-large" flat>
-          <router-link to="/history"> <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
-            <v-icon size="39" class="ma-n1">mdi-history</v-icon>
+          <router-link to="/favorites"> <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+            <v-icon size="39" class="ma-n1">mdi-star-outline</v-icon>
           </router-link>
         </v-btn>
       </div>

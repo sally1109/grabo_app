@@ -5,7 +5,7 @@ import App from './App.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Home from "./components/Home.vue"
-import History from "./components/History.vue"
+import Favorites from "./components/Favorites.vue"
 import Settings from "./components/Settings.vue"
 // ---------------------------------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ createApp(App)
 
 const routes = [
   { path: "/", component: Home },
-  { path: "/history", component: History },
+  { path: "/favorites", component: Favorites },
   { path: "/settings", component: Settings }
 ]
 

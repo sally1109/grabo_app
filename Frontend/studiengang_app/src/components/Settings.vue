@@ -29,12 +29,19 @@ export default {
   },
   methods: {
     changeData: function (e) {
+      console.log(e),
       axios
         .put("http://localhost:8080/data/0", {
           name: e.name,
-          height: e.height,
-          age: e.age
+          bundesland: e.bundesland,
+          nc: e.nc
         })
+        .then(response => {
+          console.log('Server response:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating data:', error);
+         });
     }
   },
   mounted() {
