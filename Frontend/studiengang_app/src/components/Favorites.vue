@@ -5,24 +5,24 @@
     <img src="https://cdn.discordapp.com/attachments/1057666656320618587/1063508132757778512/waage_9.png">
   </header>
   <div class="container_pages">
-    <ListWeight v-for="(singleEntry, index) of listOfEntries.slice().reverse()" :key="index" :entry="singleEntry"
-      :index="listOfEntries.length - index - 1" @weightRemoved="removeWeight" @weightEdited="editWeight">
-    </ListWeight>
+    <ListFavorites v-for="(singleEntry, index) of listOfEntries.slice().reverse()" :key="index" :entry="singleEntry"
+      :index="listOfEntries.length - index - 1" @favoritesRemoved="removeFavorites">
+    </ListFavorites>
   </div>
 </template>
 
 <script>
 
-import ListWeight from "./ListWeight.vue";
+import ListFavorites from "./ListFavorites.vue";
 import axios from "axios";
 
 export default {
-  name: "History",
+  name: "Favorites",
   props: {
     msg: String
   },
   components: {
-    ListWeight
+    ListFavorites
   },
   data: function () {
     return {
@@ -30,18 +30,9 @@ export default {
     };
   },
   methods: {
-    editWeight: function (e) {
+    removeFavorite: function (e) {
       axios
-        .put("http://localhost:8080/weight/" + e.index, {
-          weight: e.weight
-        })
-        .then(response => {
-          this.listOfEntries = response.data;
-        });
-    },
-    removeWeight: function (e) {
-      axios
-        .delete("http://localhost:8080/weight/" + e.index)
+        .delete("http://localhost:8080/favorites/" + e.index)
         .then(response => {
           this.listOfEntries = response.data;
         });
@@ -49,7 +40,7 @@ export default {
   },
   mounted() {
     axios
-      .get("http://localhost:8080/weight/").then(response => {
+      .get("http://localhost:8080/favorites").then(response => {
         this.listOfEntries = response.data;
       });
   }

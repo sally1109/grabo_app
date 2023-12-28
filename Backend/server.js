@@ -6,6 +6,7 @@ const cors = require("cors");
 const port = 8080;
 const filename = __dirname + "/weight.json";
 const filename2 = __dirname + "/data.json";
+const filename3 = __dirname + "/favorites.json";
 
 //Middleware
 app.use(express.json()); //for parsing application/json
@@ -103,6 +104,28 @@ app.get("/data", function (req, res) {
             "Content-Type": "application/json",
         });
         res.end(data);
+    });
+});
+
+app.get("/favorites", function (req, res) {
+    fs.readFile(filename3, "utf8", function (err, data) {
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+        });
+        res.end(data);
+    });
+});
+
+app.delete("/favorites/:id", function (req, res) {
+    fs.readFile(filename3, "utf8", function (err, data) {
+        let dataAsObject = JSON.parse(data);
+        dataAsObject.splice(req.params.id, 1);
+        fs.writeFile(filename3, JSON.stringify(dataAsObject), () => {
+            res.writeHead(200, {
+                "Content-Type": "application/json",
+            });
+            res.end(JSON.stringify(dataAsObject));
+        });
     });
 });
 
