@@ -30,7 +30,7 @@ export default {
     };
   },
   methods: {
-    removeFavorite: function (e) {
+    removeFavorites: function (e) {
       axios
         .delete("http://localhost:8080/favorites/" + e.index)
         .then(response => {
@@ -42,6 +42,7 @@ export default {
     axios
       .get("http://localhost:8080/favorites").then(response => {
         this.listOfEntries = response.data;
+        console.log(this.listOfEntries);
       });
   }
 }
