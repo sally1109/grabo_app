@@ -42,7 +42,6 @@ export default {
     axios
       .get("http://localhost:8080/favorites").then(response => {
         this.listOfEntries = response.data;
-        console.log(this.listOfEntries);
       });
   }
 }
