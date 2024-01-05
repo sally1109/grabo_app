@@ -7,7 +7,7 @@
   <div class="container">
     <h4 id="headline_data">Personal Data</h4>
     <v-text-field id="input" label="Name" v-model="data.name" variant="underlined"></v-text-field>
-    <v-autocomplete label="Bundesland" :items="items" v-model="data.bundesland" variant="underlined"></v-autocomplete>
+    <v-autocomplete id="autocomplete" label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland" variant="underlined"></v-autocomplete>
     <v-text-field id="input" label="NC (numerus clausus)" v-model="data.nc" variant="underlined"></v-text-field>
     <button class="btn" id="btn_change" @click="changeData">Change</button>
   </div>

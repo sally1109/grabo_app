@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="ListWeight">
     <span v-if= "entry && entry.name" id="span_name"> {{ entry.name }}</span>
-    <v-icon icon="mdi-map-marker"></v-icon>
+    <v-icon icon="mdi-map-marker" size="small" ></v-icon>
     <span v-if= "entry && entry.ort" id="span_ort"> {{ entry.ort }} </span>
     <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
   </div>
@@ -57,6 +57,7 @@ span {
 
 #span_name {
   width: 200px;
+  font-size: small;
 }
 
 #btn_remove {
