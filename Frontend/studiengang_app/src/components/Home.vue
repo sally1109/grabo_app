@@ -6,7 +6,7 @@
   </header>
   <div class="container_pages">
     <div>
-      <SearchBar @filter-changed="updateFilter" />
+      <SearchBar @filter-changed="updateFilter" @reset-filters="resetFilters" />
     </div>
 
 
@@ -155,6 +155,9 @@ export default {
         parameter1: '',
         parameter2: '',
         parameter3: '',
+        parameter4: '',
+        parameter5: '',
+        parameter6: '',
       }
     };
   },
@@ -177,7 +180,7 @@ export default {
           course.st.includes(parameter4) &&
           course.smo.includes(parameter5) && 
           course.hsa.includes(parameter6) 
-          // Weitere Parameter hier hinzufügen
+
         );
       });
     },
@@ -194,6 +197,16 @@ export default {
 
       updateFilter(newFilterParams) {
         this.filterParams = newFilterParams;
+      },
+
+      resetFilters() {
+        console.log('resetFilters wurde aufgerufen');
+        this.filterParams.parameter1 = '';
+        this.filterParams.parameter2 = '';
+        this.filterParams.parameter3 = '';
+        this.filterParams.parameter4 = '';
+        this.filterParams.parameter5 = '';
+        this.filterParams.parameter6 = '';
       },
 
 

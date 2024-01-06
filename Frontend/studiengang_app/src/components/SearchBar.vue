@@ -12,7 +12,7 @@
     <v-dialog v-model="dialog" max-width="600">
       <v-card>
         <v-card-title>Filter</v-card-title>
-
+<div id="filterCard">
         <v-autocomplete class="textf" v-model="selectedParameter1" :items="[
           { title: 'Bade-Württemberg', value: 'BW' },
           { title: 'Bayern', value: 'BY' },
@@ -73,13 +73,10 @@
           { title: 'Hochschule eigenen Typs', value: '114' },
         ]" id="inputState" label="Studiengangmodell" item-value="value"></v-autocomplete>
 
-          
-
-
-
+</div>
 
         <v-card-actions>
-          <v-btn @click="closeDialog">Schließen</v-btn>
+          <v-btn @click="closeDialog">Filter zurücksetzen</v-btn>
           <button @click="applyFilter">Filter anwenden</button>
         </v-card-actions>
       </v-card>
@@ -109,6 +106,7 @@ export default {
       this.dialog = true;
     },
     closeDialog() {
+      this.$emit('reset-filters');
       this.dialog = false;
       this.selectedParameter1 = null;
       this.selectedParameter2 = null;
@@ -116,6 +114,7 @@ export default {
       this.selectedParameter4 = null;
       this.selectedParameter5 = null;
       this.selectedParameter6 = null;
+
     },
     applyFilter() {
       const filterParams = {
@@ -147,6 +146,13 @@ div {
   padding-left: 20px;
 }
 
+#filterCard{
+  display:flex;
+  flex-direction: column;
+  width: 100%;
+
+}
+
 #Search {
   margin: auto;
 }
@@ -158,5 +164,6 @@ div {
 #inputState {
   margin: auto;
   padding-left: 10px;
+  width: 100%;
 }
 </style>
