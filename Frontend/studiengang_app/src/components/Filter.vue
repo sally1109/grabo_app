@@ -1,5 +1,5 @@
 <template>
-  <div class="container" id="SearchBar">
+  <div class="container" id="Filter">
 
     <!-- Suchleiste -->
     <v-text-field id="Search" v-model="search" label="Suche"></v-text-field>

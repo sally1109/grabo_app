@@ -6,7 +6,7 @@
   </header>
   <div class="container_pages">
     <div>
-      <SearchBar @filter-changed="updateFilter" @reset-filters="resetFilters" />
+      <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" />
     </div>
 
 
@@ -122,8 +122,8 @@ import WeightChart from "./WeightChart.vue";
 import BMI from "./BMI.vue";
 import CurrentWeight from "./CurrentWeight.vue";
 import axios from "axios";
-import SearchBar from "./SearchBar.vue";
-import ListCourse from "./ListCourse.vue";
+import Filter from "./Filter.vue";
+
 
 
 export default {
@@ -136,8 +136,8 @@ export default {
     WeightChart,
     BMI,
     CurrentWeight,
-    SearchBar,
-    ListCourse
+    Filter,
+
   },
   data: function () {
     return {
