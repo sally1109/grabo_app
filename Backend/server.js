@@ -110,6 +110,14 @@ app.get("/data", function (req, res) {
 
 app.get("/favorites", function (req, res) {
     fs.readFile(filename3, "utf8", function (err, data) {
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+        });
+        res.end(data);
+    });
+});
+
+
 //Api-Endpunkt zum Abrufen aller Daten
 app.get("/course", function (req, res) {
     fs.readFile(filenameM, "utf8", function (err, data) {

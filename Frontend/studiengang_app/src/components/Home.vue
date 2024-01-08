@@ -2,7 +2,7 @@
   <header>
     <h3 class="headline_1">Overview</h3>
     <h1 class="headline_2">Home</h1>
-    <img src="https://cdn.discordapp.com/attachments/1057666656320618587/1063508132757778512/waage_9.png">
+    <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
     <div>
@@ -82,45 +82,14 @@
         <span v-else-if="selectedCourse.hsa === '113'">Private Hochschule</span>
         <span v-else-if="selectedCourse.hsa === '114'">Hochschule eigenen Typs</span>
 
-        <v-btn @click="closeDialog">Schließen</v-btn>
+        <button class="btn" id="btn_close" @click="closeDialog">Schließen</button>
       </v-card>
     </v-dialog>
-
-
-
-    <!--
-    <div id="bmi_weight">
-      <CurrentWeight v-if="weightData.length > 0 && heightData.length > 0" :weightCurrent=weightData[weightData.length-1]
-        :weightOld=weightData[weightData.length-2]>
-      </CurrentWeight>
-      <div id="space"></div>
-      <BMI v-if="weightData.length > 0 && heightData.length > 0" :weight=weightData[weightData.length-1]
-        :height=heightData[0]>
-      </BMI>
-    </div>
-    <div class="container" id="weight_chart">
-      <div id="chart">
-        <h4>Statistics</h4>
-        <div id="chart_btn">
-          <button class="btn" id="btn_week" @click="isweek = true, changeDays()">7 Days</button>
-          <button class="btn" id="btn_2weeks" @click="isweek = false, changeDays()">14 Days</button>
-        </div>
-      </div>
-      <WeightChart :isweek="isweek" :label="label" :weightData="chartDataPrep">
-      </WeightChart>
-    </div>
-    <div>
-      <AddWeight @weightAdded="addWeight"> </AddWeight>
-    </div>-->
   </div>
 </template>
 
 <script>
 
-import AddWeight from "./AddWeight.vue";
-import WeightChart from "./WeightChart.vue";
-import BMI from "./BMI.vue";
-import CurrentWeight from "./CurrentWeight.vue";
 import axios from "axios";
 import Filter from "./Filter.vue";
 
@@ -305,7 +274,7 @@ h4 {
 
 #btn_2weeks:focus,
 #btn_week:focus {
-  background-color: #6D60FF;
+  background-color: #F74E15;
 }
 
 #ListCourse{
@@ -320,4 +289,11 @@ h4 {
 span{
   padding-left: 10px;
 }
+
+#btn_close {
+  border-radius: 13px;
+  margin: 8px -2.5px 0 -2.5px;
+  padding: 12px 15px;
+}
+
 </style>

@@ -28,7 +28,7 @@ export default {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
   color: #202020;
-  background-color: #FAFCFE;
+  background-color: #fefcfa;
   padding: 35px 28px 0 28px;
 }
 
@@ -40,7 +40,7 @@ header {
   height: 138px;
   left: 0;
   top: 0;
-  background-color: #FAFCFE;
+  background-color: #fefcfa;
 }
 
 .headline_1 {
@@ -87,11 +87,11 @@ img {
   border: none;
   font-size: 17.5px;
   color: white;
-  background-color: #6D60FF;
+  background-color: #F74E15;
   margin: 0;
 }
 
 .btn:active {
-  background-color: #7c70fc;
+  background-color: #ED8A68;
 }
 </style>

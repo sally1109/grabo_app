@@ -63,7 +63,7 @@ h4 {
 h2 {
   font-size: 30px;
   font-weight: 500;
-  color: #6D60FF;
+  color: #F74E15;
   margin-top: 22px;
   margin-bottom: -2px;
 }
