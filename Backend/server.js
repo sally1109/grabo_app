@@ -7,6 +7,7 @@ const port = 8080;
 const filename = __dirname + "/weight.json";
 const filename2 = __dirname + "/data.json";
 const filename3 = __dirname + "/favorites.json";
+const filenameM = __dirname + "/course.json";
 
 //Middleware
 app.use(express.json()); //for parsing application/json
@@ -109,6 +110,9 @@ app.get("/data", function (req, res) {
 
 app.get("/favorites", function (req, res) {
     fs.readFile(filename3, "utf8", function (err, data) {
+//Api-Endpunkt zum Abrufen aller Daten
+app.get("/course", function (req, res) {
+    fs.readFile(filenameM, "utf8", function (err, data) {
         res.writeHead(200, {
             "Content-Type": "application/json",
         });
@@ -128,5 +132,19 @@ app.delete("/favorites/:id", function (req, res) {
         });
     });
 });
+
+//Api zum Abfragen einer bestimmten Id
+app.get("/course/:id", function (req, res) {
+    fs.readFile(filenameM, "utf8", function (err, data) {
+        const dataAsObject = JSON.parse(data)[req.params.id];
+        res.writeHead(200, {
+            "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(dataAsObject));
+    });
+});
+
+
+
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`));
