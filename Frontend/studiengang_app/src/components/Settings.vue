@@ -25,11 +25,10 @@ export default {
     };
   },
   components: {
-    PersonalData,
+    PersonalData
   },
   methods: {
     changeData: function (e) {
-      console.log(e),
       axios
         .put("http://localhost:8080/data/0", {
           name: e.name,

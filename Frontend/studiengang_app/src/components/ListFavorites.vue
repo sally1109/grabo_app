@@ -1,20 +1,10 @@
 <template>
-  <div class="container" id="ListWeight">
+  <div class="container" id="ListFavorites">
     <span v-if= "entry && entry.name" id="span_name"> {{ entry.name }}</span>
     <v-icon icon="mdi-map-marker" size="small" ></v-icon>
     <span v-if= "entry && entry.ort" id="span_ort"> {{ entry.ort }} </span>
     <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
   </div>
-  <!-- <v-card id="ListWeight">
-    <div>
-      <v-card-text id="span_name"> {{ entry.name }} </v-card-text>
-      <v-icon icon="mdi-map-marker"></v-icon>
-      <v-card-text id="span_ort"> {{ entry.ort }} </v-card-text>
-    </div>
-      <v-card-action>
-        <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
-      </v-card-action>
-  </v-card> -->
 </template>
 
 <script>
@@ -37,7 +27,7 @@ div {
   display: flex;
 }
 
-#ListWeight {
+#ListFavorites {
   display: flex;
   justify-content: space-between;
   align-items: center;

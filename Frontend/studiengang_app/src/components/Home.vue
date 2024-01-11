@@ -101,21 +101,10 @@ export default {
     msg: String
   },
   components: {
-    AddWeight,
-    WeightChart,
-    BMI,
-    CurrentWeight,
-    Filter,
-
+    Filter
   },
   data: function () {
     return {
-      weightData: [],
-      heightData: [],
-      isweek: true,
-      chartDataPrep: [],
-      label: [],
-
       dialogVisible: false,
       selectedCourse: {},
       listOfCourses: [],
@@ -177,44 +166,11 @@ export default {
         this.filterParams.parameter5 = '';
         this.filterParams.parameter6 = '';
       },
-
-
-      addWeight: function (e) {
-        axios
-          .post("http://localhost:8080/weight/", {
-            weight: e.weight,
-            date: e.date
-          })
-          .then(response => {
-            this.weightData = response.data;
-            this.changeDays();
-          });
-      },
-      changeDays() {
-        let self = this;
-        let chartData = [];
-        let labels = [];
-        for (let i = this.weightData.length - (this.isweek ? 7 : 14); i <= this.weightData.length - 1; i++) {
-          labels.push(this.weightData[i].date);
-          chartData.push(this.weightData[i].weight);
-        }
-        self.chartDataPrep = chartData;
-        self.label = labels;
-      },
     },
 
 
 
     mounted() {
-      axios
-        .get("http://localhost:8080/weight/").then(response => {
-          this.weightData = response.data;
-          this.changeDays()
-        });
-      axios
-        .get("http://localhost:8080/data/").then(response => {
-          this.heightData = response.data;
-        });
       axios
         .get("http://localhost:8080/course/").then(response => {
           this.listOfCourses = response.data;
