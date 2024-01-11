@@ -23,7 +23,6 @@
           <span v-else-if="course.abg === '12'">Staatsexamen</span>
           <span>{{ course.orte }}</span>
         </div>
-
       </v-card>
     </div>
     <v-dialog v-model="dialogVisible">
@@ -155,6 +154,7 @@ export default {
 
       updateFilter(newFilterParams) {
         this.filterParams = newFilterParams;
+        console.log(newFilterParams);
       },
 
       resetFilters() {

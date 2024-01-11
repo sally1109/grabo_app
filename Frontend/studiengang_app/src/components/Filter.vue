@@ -14,7 +14,7 @@
         <v-card-title>Filter</v-card-title>
 <div id="filterCard">
         <v-autocomplete class="textf" v-model="selectedParameter1" :items="[
-          { title: 'Bade-Württemberg', value: 'BW' },
+          { title: 'Baden-Württemberg', value: 'BW' },
           { title: 'Bayern', value: 'BY' },
           { title: 'Berlin', value: 'BE' },
           { title: 'Brandenburg', value: 'BB' },
@@ -22,7 +22,7 @@
           { title: 'Hessen', value: 'BY' },
           { title: 'Mecklenburg-Vorpommern', value: 'BY' },
           { title: 'Niedersachsen', value: 'BY' },
-          { title: 'Nordrhei-Westfalen', value: 'BY' },
+          { title: 'Nordrhein-Westfalen', value: 'BY' },
           { title: 'Rheinland-Pfalz', value: 'BY' },
           { title: 'Saarland', value: 'SL' },
           { title: 'Sachsen', value: 'SN' },
