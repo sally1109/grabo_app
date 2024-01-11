@@ -3,11 +3,11 @@ const axios = require('axios');
 const app = express();
 const port = 3000;
 
-// Client Credentials
+
 const client_id = '5aee2cfe-1709-48a9-951d-eb48f8f73a74';
 const client_secret = '3309a57a-9214-40db-9abe-28b1bb30c08c';
 
-// Funktion zum Token-Abrufen
+
 async function getToken() {
     try {
       const response = await axios.post('https://rest.arbeitsagentur.de/oauth/gettoken_cc', {
@@ -28,12 +28,11 @@ async function getToken() {
     }
   }
 
-// Funktion zum Abrufen von Daten mit Token
+
 async function getDataFromToken(token) {
   try {
     const headers = {
       'OAuthAccessToken': token
-      // Alternativ: 'X-API-Key': client_id
     };
 
     const response = await axios.get('https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote', {
@@ -46,7 +45,7 @@ async function getDataFromToken(token) {
   }
 }
 
-// Routen für Token und Daten
+
 app.get('/getToken', async (req, res) => {
   try {
     const token = await getToken();
@@ -66,7 +65,7 @@ app.get('/getData', async (req, res) => {
   }
 });
 
-// Starte den Server
+
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
