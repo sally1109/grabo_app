@@ -1,11 +1,16 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
 const app = express();
 const port = 2000;
 
+app.use(cors());
 
-const client_id = '5aee2cfe-1709-48a9-951d-eb48f8f73a74';
-const client_secret = '3309a57a-9214-40db-9abe-28b1bb30c08c';
+function log(req, res, next) {
+    console.log(req.method + " Request at" + req.url);
+    next();
+}
+app.use(log);
 
 
 app.use(async function (req, res, next) {
@@ -15,9 +20,8 @@ app.use(async function (req, res, next) {
       next();
   } catch (error) {
       throw new Error('Fehler beim Abrufen des Tokens');
-  }
-  }
-);
+  }  
+});
 
 
 async function getToken() {
