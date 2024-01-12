@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import { createAuth0 } from '@auth0/auth0-vue';
 
 // Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo)
 import { createRouter, createWebHashHistory } from 'vue-router'
@@ -39,7 +40,7 @@ createApp(App)
 const routes = [
   { path: "/", component: Home },
   { path: "/favorites", component: Favorites },
-  { path: "/settings", component: Settings }
+  { path: "/settings", component: Settings },
 ]
 
 
@@ -50,6 +51,15 @@ const router = createRouter({
 })
 
 app.use(router)
+app.use(
+  createAuth0({
+    domain: "dev-7a5o048ysc5rzbjx.eu.auth0.com",
+    clientId: "MhZhqogZT75RNzsgFD1AC3gFJXj22xrM",
+    authorizationParams: {
+      redirect_uri: window.location.origin
+    }
+  })
+);
 // ---------------------------------------------------------------------------------------------------
 
 app.mount('#app')

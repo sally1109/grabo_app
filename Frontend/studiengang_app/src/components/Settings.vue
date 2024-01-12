@@ -4,13 +4,20 @@
     <h1 class="headline_2">Settings</h1>
     <!-- <img src=> TODO Logo-->
   </header>
-  <div class="container_pages">
+  <div v-if="this.$auth0.isAuthenticated" class="container_pages">
     <PersonalData @dataChanged="changeData" :data=daten[0]></PersonalData>
+    <Logout></Logout>
+    <Login v-if="!this.$auth0.isAuthenticated"></Login>
+  </div>
+  <div>
+    <Login></Login>
   </div>
 </template>
 
 <script>
 import PersonalData from "./PersonalData.vue"
+import Login from "./Login.vue"
+import Logout from "./Logout.vue"
 import axios from "axios"
 
 export default {
@@ -21,11 +28,12 @@ export default {
   data: function () {
     return {
       daten: [],
-      weightData: []
     };
   },
   components: {
-    PersonalData
+    PersonalData,
+    Login,
+    Logout
   },
   methods: {
     changeData: function (e) {
@@ -43,6 +51,11 @@ export default {
          });
     }
   },
+  created() {
+    // Überprüfe den Authentifizierungsstatus und setze isAuthenticated
+    this.isAuthenticated = this.$auth0.isAuthenticated;
+  },
+
   mounted() {
     axios
       .get("http://localhost:8080/data/").then(response => {

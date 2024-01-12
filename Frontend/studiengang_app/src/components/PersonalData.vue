@@ -1,7 +1,7 @@
 <template>
   <div class="container" id="welcome">
     <h4>Welcome back</h4>
-    <h2> {{ data.name }} </h2>
+    <h2> {{ user }} </h2>
     <span>Thanks for using our app!</span>
   </div>
   <div class="container">
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Data",
   props: {
@@ -35,8 +36,19 @@ export default {
         bundesland: this.data.bundesland,
         nc: this.data.nc
       });
+    },
+  },
+  mounted() {
+    // Überprüfe, ob $auth0 verfügbar ist, bevor du darauf zugreifst
+    if (this.$auth0) {
+      console.log("hat geklappt");
+      return {
+        user: this.$auth0.user
+      }
+    } else {
+      console.error('$auth0 ist nicht definiert');
     }
-  }
+  },
 }
 </script>
 
@@ -78,6 +90,11 @@ span {
 }
 
 #btn_change {
+  border-radius: 13px;
+  margin: 8px -2.5px 0 -2.5px;
+  padding: 12px 15px;
+}
+#btn_login {
   border-radius: 13px;
   margin: 8px -2.5px 0 -2.5px;
   padding: 12px 15px;
