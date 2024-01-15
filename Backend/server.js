@@ -49,11 +49,11 @@ const clientCredentials = {
 
   
   //API Anfrage fuer ein Suchwort
-  const apiUrl_Suchwort = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=Informatikberufe';
+  const apiUrl_Suchwort = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?';
   
   async function makeRequestSuchwort(searchWord) {
     try {
-      const response = await axios.get(apiUrlSuchwort, {
+      const response = await axios.get(apiUrl_Suchwort, {
         headers: {
           'X-API-Key': clientCredentials.client_id,
         },
@@ -87,9 +87,9 @@ const clientCredentials = {
     }
   
   // Ausführung der Anfrage
-  makeRequest_Suchwort();
-  makeRequest();
-  makeRequest_Studienfach();
+  makeRequestSuchwort(Informatik);
+  //makeRequest();
+  //makeRequest_Studienfach();
 
 
 
