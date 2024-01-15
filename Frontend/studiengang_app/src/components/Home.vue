@@ -5,31 +5,33 @@
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
-    <div>
-      <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" />
-    </div>
-
-
-    <div id="ListCourse" v-for="course in filteredCourses" :key="course.id" @click="showDetails(course)">
-      <v-card>
-        <v-card-title>{{ course.sfa }}</v-card-title>
-        <div id="ListDetails">
-          <span v-if="course.abg === '0'">ohne Angabe </span>
-          <span v-else-if="course.abg === '1'">Abschlussprüfung</span>
-          <span v-else-if="course.abg === '2'">Bachelor</span>
-          <span v-else-if="course.abg === '3'">Diplom</span>
-          <span v-else-if="course.abg === '4'">Diplom(FH)</span>
-          <span v-else-if="course.abg === '10'">Master</span>
-          <span v-else-if="course.abg === '12'">Staatsexamen</span>
-          <span>{{ course.orte }}</span>
-        </div>
-      </v-card>
-    </div>
-    <v-dialog v-model="dialogVisible">
-      <v-card>
-        <v-card-title> {{ selectedCourse.sfa }}</v-card-title>
-        <span>Studienfeld: {{ selectedCourse.sfe }}</span>
-        <span>{{ selectedCourse.orte }}</span>
+    <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" />
+    <v-card class="container" id="ListHome" v-for="course in filteredCourses" :key="course.id">
+      <div id="div_name">
+        <v-card-title @click="showDetails(course)"> {{ course.sfa }} </v-card-title>
+        <v-card-action> 
+          <v-btn class="btn" id="add_btn" density="comfortable" variant="text" @click="addRemoveFavorite">
+            <v-icon size="x-large"> {{ isClicked ? 'mdi-star' : 'mdi-star-outline' }} </v-icon>
+          </v-btn>
+        </v-card-action>
+      </div>
+      <div id="div_infos" @click="showDetails(course)">
+        <v-icon icon="mdi-map-marker" size="small" ></v-icon>
+        <v-card-subtitle> {{ course.orte }} </v-card-subtitle>
+        <v-card-subtitle v-if="course.abg === '0'">ohne Angabe </v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '1'">Abschlussprüfung</v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '2'">Bachelor</v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '3'">Diplom</v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '4'">Diplom(FH)</v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '10'">Master</v-card-subtitle>
+          <v-card-subtitle v-else-if="course.abg === '12'">Staatsexamen</v-card-subtitle>
+      </div>
+  </v-card>
+  <v-dialog v-model="dialogVisible">
+    <v-card>
+      <v-card-title> {{ selectedCourse.sfa }}</v-card-title>
+      <span>Studienfeld: {{ selectedCourse.sfe }}</span>
+      <span>{{ selectedCourse.orte }}</span>
 
         <span v-if="selectedCourse.re === 'BW'">Baden-Württemberg</span>
         <span v-else-if="selectedCourse.re === 'BY'">Bayern</span>
@@ -115,7 +117,9 @@ export default {
         parameter4: '',
         parameter5: '',
         parameter6: '',
-      }
+      },
+
+      isClicked: false
     };
   },
 
@@ -166,6 +170,16 @@ export default {
         this.filterParams.parameter5 = '';
         this.filterParams.parameter6 = '';
       },
+
+      addRemoveFavorite() {
+        this.isClicked = !this.isClicked;
+        console.log(this.isClicked);
+        if (this.isClicked == true){
+          console.log(this.isClicked)
+        } else {
+          console.log(this.isClicked)
+        }
+      }
     },
 
 
@@ -174,6 +188,7 @@ export default {
       axios
         .get("http://localhost:8080/course/").then(response => {
           this.listOfCourses = response.data;
+          console.log(this.listOfCourses);
         });
     },
   }
@@ -183,54 +198,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#bmi_weight {
-  display: flex;
-  flex-direction: row;
-}
-
-#space {
-  margin-left: 28px;
-}
-
-#weight_chart {
-  padding: 20px;
-}
 
 h4 {
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 45px;
   margin-left: -1px;
-}
-
-#chart {
-  display: flex;
-  flex-direction: row;
-}
-
-#chart_btn {
-  position: absolute;
-  right: 0;
-  margin-right: 48px;
-}
-
-#btn_week {
-  font-size: 16px;
-  background-color: #A3A5B5;
-  border-radius: 10px 0 0 10px;
-  padding: 6px 12px;
-}
-
-#btn_2weeks {
-  font-size: 16px;
-  background-color: #A3A5B5;
-  border-radius: 0 10px 10px 0;
-  padding: 6px 12px;
-}
-
-#btn_2weeks:focus,
-#btn_week:focus {
-  background-color: #F74E15;
 }
 
 #ListCourse{
@@ -251,5 +224,44 @@ span{
   margin: 8px -2.5px 0 -2.5px;
   padding: 12px 15px;
 }
+
+#ListHome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px 15px 10px 15px;
+    border-radius: 13px;
+  }
+  
+  #div_name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  #div_infos {
+    display: flex;
+    flex-direction: row;
+    align-items: left;
+    width: 100%;
+  }
+  
+  .v-card-title {
+    padding: 0px;
+    max-width: 265px;
+    font-size: medium;
+  }
+  
+  .v-card-subtitle {
+    padding-left: 5px;
+  }
+  #add_btn:active {
+    background-color: none;
+  }
+
+
 
 </style>

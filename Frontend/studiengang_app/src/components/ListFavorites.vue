@@ -1,10 +1,16 @@
 <template>
-  <div class="container" id="ListFavorites">
-    <span v-if= "entry && entry.name" id="span_name"> {{ entry.name }}</span>
-    <v-icon icon="mdi-map-marker" size="small" ></v-icon>
-    <span v-if= "entry && entry.ort" id="span_ort"> {{ entry.ort }} </span>
-    <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
-  </div>
+  <v-card class="container" id="ListFavorites">
+    <div id="div_name">
+      <v-card-title> {{ entry.name }} </v-card-title>
+      <v-card-action> 
+      <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
+    </v-card-action>
+    </div>
+    <div id="div_ort">
+      <v-icon icon="mdi-map-marker" size="small" ></v-icon>
+      <v-card-subtitle prepend-icon="mdi-map-marker"> {{ entry.ort }} </v-card-subtitle>
+    </div>
+  </v-card>
 </template>
 
 <script>
@@ -23,35 +29,42 @@ export default {
 
 
 <style scoped>
-div {
-  display: flex;
-}
 
 #ListFavorites {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px 15px 10px 15px;
+  border-radius: 13px;
+}
+
+#div_name {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 21.3px;
-  padding-left: 20px;
+  width: 100%;
+}
+
+#div_ort {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  width: 100%;
 }
 
 span {
   margin: 0px 5px;
 }
 
-#span_ort {
-  font-style: italic;
-  font-size: small;
-  width: 100px;
+.v-card-title {
+  padding: 0px;
+  max-width: 265px;
+  font-size: medium;
 }
 
-#span_name {
-  width: 200px;
-  font-size: small;
-}
-
-#btn_remove {
-  border-radius: 0 13px 13px 0;
-  align-items: right;
+.v-card-subtitle {
+  padding-left: 5px;
 }
 </style>
