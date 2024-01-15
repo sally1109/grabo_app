@@ -22,7 +22,6 @@ app.use(log);
 
 //Studiensuche Datenbank
 
-
 // Client Credentials für die Authentifizierung
 const clientCredentials = {
     client_id: '5aee2cfe-1709-48a9-951d-eb48f8f73a74',
@@ -50,11 +49,11 @@ const clientCredentials = {
 
   
   //API Anfrage fuer ein Suchwort
-  const apiUrlNext = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=Informatikberufe';
+  const apiUrl_Suchwort = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=Informatikberufe';
   
   async function makeRequest_Suchwort() {
     try {
-      const response = await axios.get(apiUrlNext, {
+      const response = await axios.get(apiUrl_Suchwort, {
         headers: {
           'X-API-Key': clientCredentials.client_id
         }
@@ -66,10 +65,29 @@ const clientCredentials = {
       throw new Error('Fehler bei Token-Erstellimg 02', error.message);
     }
   }
+
+    //API Anfrage fuer ein Studienfach
+    const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sfe=93946';
+  
+    async function makeRequest_Studienfach() {
+      try {
+        const response = await axios.get(apiUrl_Studienfach, {
+          headers: {
+            'X-API-Key': clientCredentials.client_id
+          }
+        });
+        // Ausgabe der API-Antwort
+        console.log(response.data);
+      } catch (error) {
+        console.error('Fehler bei der Anfrage:', error.message);
+        throw new Error('Fehler bei Token-Erstellimg 02', error.message);
+      }
+    }
   
   // Ausführung der Anfrage
   makeRequest_Suchwort();
   makeRequest();
+  makeRequest_Studienfach();
 
 
 
