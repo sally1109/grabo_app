@@ -17,6 +17,64 @@ function log(req, res, next) {
 }
 app.use(log);
 
+
+
+
+//Studiensuche Datenbank
+
+
+// Client Credentials für die Authentifizierung
+const clientCredentials = {
+    client_id: '5aee2cfe-1709-48a9-951d-eb48f8f73a74',
+    client_secret: '3309a57a-9214-40db-9abe-28b1bb30c08c',
+    grant_type: 'client_credentials'
+  };
+  
+  //API Anfrage für Studienfelder
+  const apiUrl = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
+  
+  async function makeRequest() {
+    try {
+      const response = await axios.get(apiUrl, {
+        headers: {
+          'X-API-Key': clientCredentials.client_id
+        }
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error('Fehler bei der Anfrage:', error.message);
+      throw new Error('Fehler bei der Token-Erstellung', error.message);
+    }
+  }
+
+
+  
+  //API Anfrage fuer ein Suchwort
+  const apiUrlNext = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=Informatikberufe';
+  
+  async function makeRequest_Suchwort() {
+    try {
+      const response = await axios.get(apiUrlNext, {
+        headers: {
+          'X-API-Key': clientCredentials.client_id
+        }
+      });
+      // Ausgabe der API-Antwort
+      console.log(response.data);
+    } catch (error) {
+      console.error('Fehler bei der Anfrage:', error.message);
+      throw new Error('Fehler bei Token-Erstellimg 02', error.message);
+    }
+  }
+  
+  // Ausführung der Anfrage
+  makeRequest_Suchwort();
+  makeRequest();
+
+
+
+
+
 //Endpoints
 app.get("/weight", function (req, res) {
     fs.readFile(filename, "utf8", function (err, data) {
