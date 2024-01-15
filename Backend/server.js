@@ -71,12 +71,15 @@ const clientCredentials = {
     //API Anfrage fuer ein Studienfach
     const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sfe=93946';
   
-    async function makeRequest_Studienfach() {
+    async function makeRequest_Studienfach(studienangebote) {
       try {
         const response = await axios.get(apiUrl_Studienfach, {
           headers: {
             'X-API-Key': clientCredentials.client_id
-          }
+          },
+          params: {
+            sfe: studienangebote,
+          },
         });
         // Ausgabe der API-Antwort
         console.log(response.data);
@@ -87,9 +90,9 @@ const clientCredentials = {
     }
   
   // Ausführung der Anfrage
-  makeRequestSuchwort(Informatik);
+  //makeRequestSuchwort(Informatik);
   //makeRequest();
-  //makeRequest_Studienfach();
+  makeRequest_Studienfach(studienangebote);
 
 
 
