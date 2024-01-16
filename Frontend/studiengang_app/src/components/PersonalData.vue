@@ -6,9 +6,9 @@
   </div>
   <div class="container">
     <h4 id="headline_data">Personal Data</h4>
-    <v-text-field id="input" label="Your Name" v-model="data.name" variant="underlined"></v-text-field>
-    <v-text-field id="input" label="Your Height" v-model="data.height" suffix="meters" variant="underlined"></v-text-field>
-    <v-text-field id="input" label="Your Age" v-model="data.age" suffix="years" variant="underlined"></v-text-field>
+    <v-text-field id="input" label="Name" v-model="data.name" variant="underlined"></v-text-field>
+    <v-autocomplete id="autocomplete" label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland" variant="underlined"></v-autocomplete>
+    <v-text-field id="input" label="NC (numerus clausus)" v-model="data.nc" variant="underlined"></v-text-field>
     <button class="btn" id="btn_change" @click="changeData">Change</button>
   </div>
 </template>
@@ -20,15 +20,20 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: {}
+      default: {},
     }
   },
+  data: ()=> ({
+    items: ['Baden-Württemberg', 'Bayern', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg', 'Hessen', 'Mecklenburg-Vorpommern', 'Niedersachsen',
+            'Nordrhein-Westfalen', 'Rheinland-Pfalz', 'Saarland', 'Sachsen', 'Sachsen-Anhalt', 'Schleswig-Holstein', 'Thüringen']
+  }),
   methods: {
     changeData: function () {
+      console.log(this.data)
       this.$emit("dataChanged", {
         name: this.data.name,
-        height: this.data.height,
-        age: this.data.age
+        bundesland: this.data.bundesland,
+        nc: this.data.nc
       });
     }
   }
@@ -58,7 +63,7 @@ h4 {
 h2 {
   font-size: 30px;
   font-weight: 500;
-  color: #6D60FF;
+  color: #F74E15;
   margin-top: 22px;
   margin-bottom: -2px;
 }

@@ -2,7 +2,7 @@
   <header>
     <h3 class="headline_1">Personal</h3>
     <h1 class="headline_2">Settings</h1>
-    <img src="https://cdn.discordapp.com/attachments/1057666656320618587/1063508132757778512/waage_9.png">
+    <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
     <PersonalData @dataChanged="changeData" :data=daten[0]></PersonalData>
@@ -25,16 +25,22 @@ export default {
     };
   },
   components: {
-    PersonalData,
+    PersonalData
   },
   methods: {
     changeData: function (e) {
       axios
         .put("http://localhost:8080/data/0", {
           name: e.name,
-          height: e.height,
-          age: e.age
+          bundesland: e.bundesland,
+          nc: e.nc
         })
+        .then(response => {
+          console.log('Server response:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating data:', error);
+         });
     }
   },
   mounted() {

@@ -8,8 +8,8 @@
       </v-btn>
       <div id="gap">
         <v-btn icon="history" size="x-large" flat>
-          <router-link to="/history"> <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
-            <v-icon size="39" class="ma-n1">mdi-history</v-icon>
+          <router-link to="/favorites"> <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+            <v-icon size="39" class="ma-n1">mdi-star-outline</v-icon>
           </router-link>
         </v-btn>
       </div>
@@ -45,7 +45,7 @@ export default {
   margin: 0;
   padding: 31px 0px 40px;
   font-size: 28px;
-  background-color: #FAFCFE;
+  background-color: #fefcfa;
 }
 
 .navbar .nav_buttons {
@@ -58,8 +58,8 @@ export default {
   text-decoration: none;
   border-radius: 100px;
   padding: 16.5px;
-  background: #FAFCFE;
-  color: #A3A5B5;
+  background: #fefcfa;
+  color: #b5aba3;
 }
 
 #gap {
@@ -68,7 +68,7 @@ export default {
 }
 
 .active {
-  color: #6D60FF !important;
+  color: #F74E15 !important;
   background: rgb(255, 255, 255) !important;
   box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.2);
 }
