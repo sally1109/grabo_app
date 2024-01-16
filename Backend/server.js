@@ -72,6 +72,7 @@ const clientCredentials = {
  //Genrelle Abfrage an API für Studieninformationen (ohne Filter)
  const apiUrl = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfeldinformationen?';
   
+ /*
   //Filter Angaben. Hier Parameter reinschreiben
   const filters = {
     dkz: '94014',
@@ -85,6 +86,7 @@ const clientCredentials = {
       throw new Error('apiUrl und filters sind erforderlich.');
     }
   
+    //Hat mir Chat Gpt vorgeschlagen. Ohne funktioniert 
     const separator = apiUrl.includes('?') ? '&' : '?';
   
     const filter_dkz = `${apiUrl}${separator}${Object.entries(filters)
@@ -104,13 +106,14 @@ const clientCredentials = {
   //API Anfrage fuer ein Studienfach, mit dem Filtereintrag aus filter_suchwort
   const apiUrl_Studienfach = `${filter_suchwort}`;
 
+*/
 
 
 
 
 
+const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder?&re=HE';
 
-  
     async function makeRequest_Studienfach() {
       try {
         const response = await axios.get(apiUrl_Studienfach, {
