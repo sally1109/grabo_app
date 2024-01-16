@@ -29,9 +29,7 @@ const clientCredentials = {
     grant_type: 'client_credentials'
   };
   
-  //API Anfrage für Studienfelder
-  const apiUrl = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
-  
+ 
   async function makeRequest() {
     try {
       const response = await axios.get(apiUrl, {
@@ -68,8 +66,50 @@ const clientCredentials = {
     }
   }
 
-    //API Anfrage fuer ein Studienfach
-    const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfeldinformationen?dkz=93574&pg=1';
+
+//----------------------------- API Abfrage mit Filterfunktion ------------------------------------------------
+
+ //Genrelle Abfrage an API für Studieninformationen (ohne Filter)
+ const apiUrl = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfeldinformationen?';
+  
+  //Filter Angaben. Hier Parameter reinschreiben
+  const filters = {
+    dkz: '94014',
+    sw: 'Forstwissenschaft',
+  };
+
+  //Filter, der die apiUrl nimmt, einen Seperator der auf Und oder Fragezeichen parameter prüft und die Eingabe vom Filter hinten anhängt
+  //Das Ganze wird mir "map" hinten angehängt, dabei ist der Key der Abkürzungsparameter (dkz, sw...) und Value der jeweilige zugeordnete Stringeintrag
+  function filter_dkz(apiUrl, filters) {
+    if (!apiUrl || !filters) {
+      throw new Error('apiUrl und filters sind erforderlich.');
+    }
+  
+    const separator = apiUrl.includes('?') ? '&' : '?';
+  
+    const filter_dkz = `${apiUrl}${separator}${Object.entries(filters)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join('&')}`;
+  
+    return filter_dkz;
+  }
+
+
+  //Die Funktion wird aufgerufen und die Ausgabe in filter_suchwort gespeichert 
+  //Die Ausgaben werden ind er Console angezeigt
+  const filter_suchwort = filter_dkz(apiUrl, filters);
+  console.log('Filter-DKZ:', filter_dkz);
+
+
+  //API Anfrage fuer ein Studienfach, mit dem Filtereintrag aus filter_suchwort
+  const apiUrl_Studienfach = `${filter_suchwort}`;
+
+
+
+
+
+
+
   
     async function makeRequest_Studienfach() {
       try {
@@ -90,6 +130,7 @@ const clientCredentials = {
   //makeRequestSuchwort(Informatik);
   //makeRequest();
   makeRequest_Studienfach();
+  console.log('API-URL für Studienfach:', apiUrl_Studienfach);
 
 
 
