@@ -48,7 +48,10 @@ const clientCredentials = {
       const studientypen = extractStudientyp(response.data.items);
       const studiengangmodelle = extractStudiengangmodell(response.data.items);
       const hochschularten = extractHochschulart(response.data.items);
-  
+      
+
+      
+
       
   
     } catch (error) {
@@ -56,7 +59,7 @@ const clientCredentials = {
     }
   }
   
- g
+ 
   function extractBundesland(items) {
     return items.map(item => item.studienangebot.region.label);
   }
@@ -76,7 +79,7 @@ const clientCredentials = {
     return items.map(item => item.studienangebot.studientyp.label);
   }
   
-  g
+  
   function extractStudiengangmodell(items) {
     return items.map(item => item.studienangebot.studiengangmodel.label);
   }
@@ -178,7 +181,7 @@ function extractHochschulart(items) {
   //makeRequest_Studienfach();
   makeRequest_StudienFilter();
  // makeRequest_Studienfeldgruppen()
-  console.log('API-URL für Studienfach:', apiUrl_Studienfach);
+  //console.log('API-URL für Studienfach:', apiUrl_Studienfach);
 
 
 
@@ -221,7 +224,7 @@ async function makeRequest_Studienfeldgruppen() {
 }
 
 
-makeRequest_Studienfach();
+
 
 
 //Endpoints
