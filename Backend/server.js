@@ -78,6 +78,24 @@ app.delete("/favorites/:id", function (req, res) {
     });
 });
 
+app.post("/favorites", function (req, res) {
+    fs.readFile(filenameFavorites, "utf8", function (err, data) {
+      let dataAsObject = JSON.parse(data);
+      dataAsObject.push({
+        id: req.body.name.id,
+        name: req.body.name,
+        ort: req.body.ort,
+ 
+      });
+      fs.writeFile(filenameFavorites, JSON.stringify(dataAsObject), () => {
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
+        res.end(JSON.stringify(dataAsObject));
+      });
+    });
+  });
+
 //Api zum Abfragen einer bestimmten Id
 app.get("/course/:id", function (req, res) {
     fs.readFile(filenameCourse, "utf8", function (err, data) {
