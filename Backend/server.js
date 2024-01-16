@@ -29,6 +29,8 @@ const clientCredentials = {
     grant_type: 'client_credentials'
   };
   
+
+  //Diese Funktion filtert nach allen geforderten Parametern (bundesländer, abschlussgrade...) und speichert die angaben in Variablen (die noch dem Frontend übergeben werden müssen)
   const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=IT-Security-Manager';
 
   async function makeRequest_StudienFilter() {
