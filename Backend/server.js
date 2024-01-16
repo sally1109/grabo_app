@@ -22,9 +22,6 @@ app.use(morgan("dev"));
 
 
 
-
-//Studiensuche Datenbank
-
 // Client Credentials für die Authentifizierung
 const clientCredentials = {
     client_id: '5aee2cfe-1709-48a9-951d-eb48f8f73a74',
@@ -32,114 +29,197 @@ const clientCredentials = {
     grant_type: 'client_credentials'
   };
   
- 
-  async function makeRequest() {
+  const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=IT-Security-Manager';
+
+  async function makeRequest_StudienFilter() {
     try {
-      const response = await axios.get(apiUrl, {
+      const response = await axios.get(apiUrl_StudienFilter, {
         headers: {
           'X-API-Key': clientCredentials.client_id
-        }
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error('Fehler bei der Anfrage:', error.message);
-      throw new Error('Fehler bei der Token-Erstellung', error.message);
-    }
-  }
-
-
-  
-  //API Anfrage fuer ein Suchwort
-  const apiUrl_Suchwort = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?';
-  
-  async function makeRequestSuchwort(searchWord) {
-    try {
-      const response = await axios.get(apiUrl_Suchwort, {
-        headers: {
-          'X-API-Key': clientCredentials.client_id,
-        },
-        params: {
-          sw: searchWord,
         },
       });
-      console.log(response.data);
+  
+      // Funktionen aufrufen, um spezifische Parameter mit Studiengang auszugeben
+      const bundeslaender = extractBundesland(response.data.items);
+      const abschlussgrade = extractAbschlussgrad(response.data.items);
+      const studienformen = extractStudienform(response.data.items);
+      const studientypen = extractStudientyp(response.data.items);
+      const studiengangmodelle = extractStudiengangmodell(response.data.items);
+      const hochschularten = extractHochschulart(response.data.items);
+  
+      
+  
     } catch (error) {
       console.error('Fehler bei der Anfrage:', error.message);
-      throw new Error('Fehler bei Token-Erstellimg 02', error.message);
     }
   }
-
-
-//----------------------------- API Abfrage mit Filterfunktion ------------------------------------------------
-
- //Genrelle Abfrage an API für Studieninformationen (ohne Filter)
- const apiUrl = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfeldinformationen?';
   
- /*
-  //Filter Angaben. Hier Parameter reinschreiben
-  const filters = {
-    dkz: '94014',
-    sw: 'Forstwissenschaft',
-  };
-
-  //Filter, der die apiUrl nimmt, einen Seperator der auf Und oder Fragezeichen parameter prüft und die Eingabe vom Filter hinten anhängt
-  //Das Ganze wird mir "map" hinten angehängt, dabei ist der Key der Abkürzungsparameter (dkz, sw...) und Value der jeweilige zugeordnete Stringeintrag
-  function filter_dkz(apiUrl, filters) {
-    if (!apiUrl || !filters) {
-      throw new Error('apiUrl und filters sind erforderlich.');
-    }
-  
-    //Hat mir Chat Gpt vorgeschlagen. Ohne funktioniert 
-    const separator = apiUrl.includes('?') ? '&' : '?';
-  
-    const filter_dkz = `${apiUrl}${separator}${Object.entries(filters)
-      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-      .join('&')}`;
-  
-    return filter_dkz;
+ g
+  function extractBundesland(items) {
+    return items.map(item => item.studienangebot.region.label);
   }
-
-
-  //Die Funktion wird aufgerufen und die Ausgabe in filter_suchwort gespeichert 
-  //Die Ausgaben werden ind er Console angezeigt
-  const filter_suchwort = filter_dkz(apiUrl, filters);
-  console.log('Filter-DKZ:', filter_dkz);
-
-
-  //API Anfrage fuer ein Studienfach, mit dem Filtereintrag aus filter_suchwort
-  const apiUrl_Studienfach = `${filter_suchwort}`;
-
-*/
-
-
-
-
-
-const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder?&re=HE';
-
-    async function makeRequest_Studienfach() {
-      try {
-        const response = await axios.get(apiUrl_Studienfach, {
-          headers: {
-            'X-API-Key': clientCredentials.client_id
-          },
-        });
-        // Ausgabe der API-Antwort
-        console.log(response.data);
-      } catch (error) {
-        console.error('Fehler bei der Anfrage:', error.message);
-        throw new Error('Fehler bei Token-Erstellimg 02', error.message);
-      }
-    }
   
-  // Ausführung der Anfrage
-  //makeRequestSuchwort(Informatik);
-  //makeRequest();
-  makeRequest_Studienfach();
+  
+  function extractAbschlussgrad(items) {
+    return items.map(item => item.studienangebot.abschlussgrad.label);
+  }
+  
+  
+  function extractStudienform(items) {
+    return items.map(item => item.studienangebot.studienform.label);
+  }
+  
+  
+  function extractStudientyp(items) {
+    return items.map(item => item.studienangebot.studientyp.label);
+  }
+  
+  g
+  function extractStudiengangmodell(items) {
+    return items.map(item => item.studienangebot.studiengangmodel.label);
+  }
+  
+  
+  function extractHochschulart(items) {
+    return items.map(item => item.studienangebot.hochschulart.label);
+  }
+  
+
+
+
+
+//Diese Funktion gibt alle geforderten Parameter aus der Datenbank in der Konsole aus
+const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=IT-Security-Manager';
+
+async function makeRequest_Studienfach() {
+  try {
+    const response = await axios.get(apiUrl_Studienfach, {
+      headers: {
+        'X-API-Key': clientCredentials.client_id
+      },
+    });
+
+    
+    console.log(response.data);
+
+    en
+    extractBundesland(response.data.items);
+    extractAbschlussgrad(response.data.items);
+    extractStudienform(response.data.items);
+    extractStudientyp(response.data.items);
+    extractStudiengangmodell(response.data.items);
+    extractHochschulart(response.data.items);
+
+  } catch (error) {
+    console.error('Fehler bei der Anfrage:', error.message);
+  }
+}
+
+
+function extractBundesland(items) {
+  items.forEach(item => {
+    const bundesland = item.studienangebot.region.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
+  });
+}
+
+
+function extractAbschlussgrad(items) {
+  items.forEach(item => {
+    const abschlussgrad = item.studienangebot.abschlussgrad.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
+  });
+}
+
+
+function extractStudienform(items) {
+  items.forEach(item => {
+    const studienform = item.studienangebot.studienform.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
+  });
+}
+
+
+function extractStudientyp(items) {
+  items.forEach(item => {
+    const studientyp = item.studienangebot.studientyp.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
+  });
+}
+
+
+function extractStudiengangmodell(items) {
+  items.forEach(item => {
+    const studiengangmodel = item.studienangebot.studiengangmodel.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
+  });
+}
+
+
+function extractHochschulart(items) {
+  items.forEach(item => {
+    const hochschulart = item.studienangebot.hochschulart.label;
+    const studiengang = item.studienangebot.studiBezeichnung;
+    console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
+  });
+}
+
+    
+    
+  // -------------Anfragen-------------
+
+  //makeRequest_Studienfach();
+  makeRequest_StudienFilter();
+ // makeRequest_Studienfeldgruppen()
   console.log('API-URL für Studienfach:', apiUrl_Studienfach);
 
 
 
+
+  //Diese Funktion gibt alle Studienfeldgruppen und DkzIds aus
+//Diese Funktion dient nur als Information für die Studienfeldgruppen und ist für die Filterfunktionen unnötig
+const apiUrl_Studienfeldgruppen = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
+
+async function makeRequest_Studienfeldgruppen() {
+  try {
+    const response = await axios.get(apiUrl_Studienfeldgruppen, {
+      headers: {
+        'X-API-Key': clientCredentials.client_id,
+      },
+    });
+
+    console.log(response.data);
+
+    const studienfeldgruppen = response.data.studienfeldgruppen;
+
+    for (const studienfeldgruppe of studienfeldgruppen) {
+
+      const { key, name, dkzIds, studienfelder } = studienfeldgruppe;
+
+      console.log(`Studienfeldgruppe ${key}: ${name}`);
+      console.log(`DkzIds: ${dkzIds}`);
+      
+
+      for (const studienfeld of studienfelder) {
+
+        const { key, name, dkzIds } = studienfeld;
+
+        console.log(`- Studienfeld ${key}: ${name}`);
+        console.log(`  DkzIds: ${dkzIds}`);
+      }
+    }
+  } catch (error) {
+    console.error('Fehler bei der Anfrage:', error.message);
+  }
+}
+
+
+makeRequest_Studienfach();
 
 
 //Endpoints
