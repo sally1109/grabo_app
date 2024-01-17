@@ -58,6 +58,7 @@ export default {
       listOfCourses: [],
       favoritRE : '',
       favoritORTE : '',
+      daten: {},
 
       filterParams: {
         parameter1: '',
@@ -163,6 +164,14 @@ export default {
           this.listOfCourses = response.data;
           console.log(this.listOfCourses);
         });
+    axios
+      .get("http://localhost:8080/data/").then(response => {
+        this.daten = response.data;
+        console.log(this.daten)
+        this.filterParams.parameter1 = this.daten[0].bundesland;
+        console.log(this.filterParams.parameter1)
+        console.log(this.daten[0].bundesland)
+      })
     },
   }
 

@@ -31,9 +31,14 @@ export default {
       console.log(this.data)
       this.$emit("dataChanged", {
         name: this.data.name,
-        bundesland: this.data.bundesland,
+        bundesland: checkBundesland(this.data.bundesland),
         nc: this.data.nc
       });
+    },
+    checkBundesland: function (bundesland) {
+       if (bundesland == "Baden-Württemberg") {
+        return "bw";
+       }
     }
   }
 }
