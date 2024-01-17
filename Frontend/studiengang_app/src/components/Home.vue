@@ -16,7 +16,7 @@
     <div id="div_name">
       <v-card-title @click="dialogVisible=true, defineCourse(course)"> {{ course.sfa }} </v-card-title>
       <v-card-actions> <!-- Änderung hier von v-card-action auf v-card-actions -->
-        <v-btn class="btn" id="add_btn" density="comfortable" variant="text" @click="addRemoveFavorite(course)">
+        <v-btn class="btn" id="add_btn" density="comfortable" variant="text" @click=" defineCourse(course); addEntry();">
           <v-icon size="x-large"> {{ isClicked ? 'mdi-star' : 'mdi-star-outline' }} </v-icon>
         </v-btn>
       </v-card-actions>
@@ -39,6 +39,7 @@
 <script>
 
 import axios from "axios";
+import { v4 as uuidV4 } from 'uuid';
 import Filter from "./Filter.vue";
 import DetailsCourse from "./DetailsCourse.vue";
 
@@ -57,6 +58,8 @@ export default {
       dialogVisible: false,
       defindCourse: {},
       listOfCourses: [],
+      favoritRE : '',
+      favoritORTE : '',
 
       filterParams: {
         parameter1: '',
@@ -98,7 +101,8 @@ export default {
     methods: {
       defineCourse(course) {
         this.defindCourse = course;
- 
+        this.favoritRE = course.sfa;
+        this.favoritORTE = course.orte;
       },
 
       closeDialog(){
@@ -121,7 +125,7 @@ export default {
         this.filterParams.parameter6 = '';
       },
 
-      addRemoveFavorite(course) {
+      addRemoveFavorite() {
         this.isClicked = !this.isClicked;
         console.log(this.isClicked);
         if (this.isClicked == true){
@@ -130,24 +134,27 @@ export default {
           console.log(this.isClicked)
         }
       },
-     /*
-    addEntry: function (e) {
+    handleButtonClick(course) { 
+      this.addEntry;
+      this.defineCourse(course);
+
+    },
+
+    addEntry: function () {
+      console.log('Zu sendende Daten:', { name: this.favoritORTE, ort: this.favoritRE });
+
       axios
         .post("http://" + window.location.hostname + ":8080/favorites/", {
-          : e.name,
-          
-          description: e.description,
-          type: e.type,
-          rating: e.rating,
+          name : this.favoritRE,
+          ort : this.favoritORTE,
+
         })
         .then((response) => {
           this.listOfEntries = response.data;
           this.updateKey = uuidV4();
         });
-    },*/
     },
-
-
+    },
 
     mounted() {
       axios
@@ -157,6 +164,7 @@ export default {
         });
     },
   }
+
 
 
 </script>

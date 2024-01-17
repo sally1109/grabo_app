@@ -79,10 +79,11 @@ app.delete("/favorites/:id", function (req, res) {
 });
 
 app.post("/favorites", function (req, res) {
+    console.log('Angekommene Daten:', req.body);
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
       let dataAsObject = JSON.parse(data);
       dataAsObject.push({
-        id: req.body.name.id,
+        id: dataAsObject.length,
         name: req.body.name,
         ort: req.body.ort,
  
