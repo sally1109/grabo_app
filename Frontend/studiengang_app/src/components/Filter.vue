@@ -2,82 +2,84 @@
   <div class="container" id="Filter">
 
     <!-- Suchleiste -->
-    <v-text-field id="Search" v-model="search" label="Suche"></v-text-field>
-
-    <v-btn id="Filter" @click="openDialog" icon>
+    <v-text-field id="Search" v-model="search" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+    <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
       <v-icon>mdi-filter</v-icon>
     </v-btn>
 
     <!-- Popup-Fenster -->
     <v-dialog v-model="dialog" max-width="600">
-      <v-card>
+      <v-card class="container">
         <v-card-title>Filter</v-card-title>
-<div id="filterCard">
-        <v-autocomplete class="textf" v-model="selectedParameter1" :items="[
-          { title: 'Baden-Württemberg', value: 'BW' },
-          { title: 'Bayern', value: 'BY' },
-          { title: 'Berlin', value: 'BE' },
-          { title: 'Brandenburg', value: 'BB' },
-          { title: 'Hamburg', value: 'BY' },
-          { title: 'Hessen', value: 'BY' },
-          { title: 'Mecklenburg-Vorpommern', value: 'BY' },
-          { title: 'Niedersachsen', value: 'BY' },
-          { title: 'Nordrhein-Westfalen', value: 'BY' },
-          { title: 'Rheinland-Pfalz', value: 'BY' },
-          { title: 'Saarland', value: 'SL' },
-          { title: 'Sachsen', value: 'SN' },
-          { title: 'Sachsen-Anhalt', value: 'ST' },
-          { title: 'Schleswig-Holstein', value: 'SH' },
-          { title: 'Thüringen', value: 'TH' },
-          { title: 'Österreich', value: 'iA' },
-        ]" id="inputState" label="Bundesland" item-text="text" item-value="value" ></v-autocomplete>
+        <div id="filterCard">
+          <v-autocomplete v-model="selectedParameter1" :items="[
+            { title: 'Baden-Württemberg', value: 'BW' },
+            { title: 'Bayern', value: 'BY' },
+            { title: 'Berlin', value: 'BE' },
+            { title: 'Brandenburg', value: 'BB' },
+            { title: 'Hamburg', value: 'BY' },
+            { title: 'Hessen', value: 'BY' },
+            { title: 'Mecklenburg-Vorpommern', value: 'BY' },
+            { title: 'Niedersachsen', value: 'BY' },
+            { title: 'Nordrhein-Westfalen', value: 'BY' },
+            { title: 'Rheinland-Pfalz', value: 'BY' },
+            { title: 'Saarland', value: 'SL' },
+            { title: 'Sachsen', value: 'SN' },
+            { title: 'Sachsen-Anhalt', value: 'ST' },
+            { title: 'Schleswig-Holstein', value: 'SH' },
+            { title: 'Thüringen', value: 'TH' },
+            { title: 'Österreich', value: 'iA' },]" id="inputState" label="Bundesland" item-text="text"
+            item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-        <v-autocomplete class="textf" v-model="selectedParameter2" :items="[
-          { title: 'ohne Angabe', value: '0' },
-          { title: 'Abschlussprüfung', value: '1' },
-          { title: 'Bachelor', value: '2' },
-          { title: 'Diplom', value: '3' },
-          { title: 'Diplom(FH)', value: '4' },
-          { title: 'Master', value: '10' },
-          { title: 'Staatsexamen', value: '12' },
-        ]" id="inputState" label="Abschluss" item-value="value"></v-autocomplete>
+          <v-autocomplete class="textf" v-model="selectedParameter2" :items="[
+            { title: 'ohne Angabe', value: '0' },
+            { title: 'Abschlussprüfung', value: '1' },
+            { title: 'Bachelor', value: '2' },
+            { title: 'Diplom', value: '3' },
+            { title: 'Diplom(FH)', value: '4' },
+            { title: 'Master', value: '10' },
+            { title: 'Staatsexamen', value: '12' },
+          ]" id="inputState" label="Abschluss" item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-        <v-autocomplete class="textf" v-model="selectedParameter3" :items="[
-          { title: 'Vollzeitstudium', value: '1' },
-          { title: 'Teilzeitstudium', value: '2' },
-          { title: 'Wochenendveranstaltung', value: '3' },
-          { title: 'Fernstudium', value: '4' },
-          { title: 'Selbststudium', value: '5' },
-          { title: 'Blockstudium', value: '6' },
-        ]" id="inputState" label="Art des Studiums" item-value="value"></v-autocomplete>
+          <v-autocomplete class="textf" v-model="selectedParameter3" :items="[
+            { title: 'Vollzeitstudium', value: '1' },
+            { title: 'Teilzeitstudium', value: '2' },
+            { title: 'Wochenendveranstaltung', value: '3' },
+            { title: 'Fernstudium', value: '4' },
+            { title: 'Selbststudium', value: '5' },
+            { title: 'Blockstudium', value: '6' },
+          ]" id="inputState" label="Art des Studiums" item-value="value"
+            :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-        <v-autocomplete class="textf" v-model="selectedParameter4" :items="[
-          { title: 'Studiengang grundständig', value: '0' },
-          { title: 'Studiengang weiterführend', value: '1' },
-        ]" id="inputState" label="Studiumstyp" item-value="value"></v-autocomplete>
+          <v-autocomplete class="textf" v-model="selectedParameter4" :items="[
+            { title: 'Studiengang grundständig', value: '0' },
+            { title: 'Studiengang weiterführend', value: '1' },
+          ]" id="inputState" label="Studiumstyp" item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-        <v-autocomplete class="textf" v-model="selectedParameter5" :items="[
-          { title: 'ausbildungsintegrierend', value: '1' },
-          { title: 'berufsintegrierend', value: '2' },
-          { title: 'berufsbegleitend', value: '3' },
-          { title: 'praxisintegrierend', value: '4' },
-          { title: 'Duales Studium allgemein', value: '5' },
-        ]" id="inputState" label="Studiengangmodell" item-value="value"></v-autocomplete>
+          <v-autocomplete class="textf" v-model="selectedParameter5" :items="[
+            { title: 'ausbildungsintegrierend', value: '1' },
+            { title: 'berufsintegrierend', value: '2' },
+            { title: 'berufsbegleitend', value: '3' },
+            { title: 'praxisintegrierend', value: '4' },
+            { title: 'Duales Studium allgemein', value: '5' },
+          ]" id="inputState" label="Studiengangmodell" item-value="value"
+            :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-        <v-autocomplete class="textf" v-model="selectedParameter6" :items="[
-          { title: 'Berufsakademie/Duale Hochschule', value: '101' },
-          { title: 'FH/FAW', value: '106' },
-          { title: 'Kunst- und Musikhochschule', value: '107' },
-          { title: 'Universität', value: '108' },
-          { title: 'Private Hochschule', value: '113' },
-          { title: 'Hochschule eigenen Typs', value: '114' },
-        ]" id="inputState" label="Studiengangmodell" item-value="value"></v-autocomplete>
+          <v-autocomplete class="textf" v-model="selectedParameter6" :items="[
+            { title: 'Berufsakademie/Duale Hochschule', value: '101' },
+            { title: 'FH/FAW', value: '106' },
+            { title: 'Kunst- und Musikhochschule', value: '107' },
+            { title: 'Universität', value: '108' },
+            { title: 'Private Hochschule', value: '113' },
+            { title: 'Hochschule eigenen Typs', value: '114' },
+          ]" id="inputState" label="Studiengangmodell" item-value="value"
+            :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
 
-</div>
+        </div>
 
         <v-card-actions>
-          <v-btn @click="closeDialog">Filter zurücksetzen</v-btn>
-          <button @click="applyFilter">Filter anwenden</button>
+          <button class="btn" @click="closeDialog">Zurücksetzen</button>
+          <button class="btn" @click="applyFilter">Anwenden</button>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -96,11 +98,11 @@ export default {
       selectedParameter4: null,
       selectedParameter5: null,
       selectedParameter6: null,
-      
+
     };
   },
 
-  
+
   methods: {
     openDialog() {
       this.dialog = true;
@@ -134,27 +136,21 @@ export default {
   
 
 <style scoped>
-div {
-  display: flex;
-}
-
-#SearchBar {
+#Filter {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 21.3px;
-  padding-left: 20px;
+  margin-right: 0px !important;
+  padding: 10px 10px 10px 10px;
+  border-radius: 13px;
+  max-height: 80px;
 }
 
-#filterCard{
-  display:flex;
+#filterCard {
+  display: flex;
   flex-direction: column;
   width: 100%;
-
-}
-
-#Search {
-  margin: auto;
+  padding: 0px 21px 0px 21px;
 }
 
 #Filter {
@@ -165,5 +161,21 @@ div {
   margin: auto;
   padding-left: 10px;
   width: 100%;
+}
+
+.v-card-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  border-radius: 13px;
+  margin: 5px 10px;
+  padding: 12px 15px;
+}
+.v-card-title {
+  padding-left: 20px;
+  font-size: large;
+  color: #F74E15;
 }
 </style>

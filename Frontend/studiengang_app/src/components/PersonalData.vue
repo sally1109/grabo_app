@@ -1,13 +1,12 @@
 <template>
   <div class="container" id="welcome">
-    <h4>Welcome back</h4>
+    <h4>Willkomen zurück</h4>
     <h2> {{ data.name }} </h2>
-    <span>Thanks for using our app!</span>
   </div>
   <div class="container">
     <h4 id="headline_data">Personal Data</h4>
     <v-text-field id="input" label="Name" v-model="data.name" variant="underlined"></v-text-field>
-    <v-autocomplete id="autocomplete" label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland" variant="underlined"></v-autocomplete>
+    <v-autocomplete label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland" variant="underlined"></v-autocomplete>
     <v-text-field id="input" label="NC (numerus clausus)" v-model="data.nc" variant="underlined"></v-text-field>
     <button class="btn" id="btn_change" @click="changeData">Change</button>
   </div>
@@ -50,7 +49,6 @@ export default {
 #welcome {
   display: flex;
   flex-direction: column;
-  height: 158px;
   width: 100%;
   padding: 20px;
 }
@@ -64,7 +62,6 @@ h2 {
   font-size: 30px;
   font-weight: 500;
   color: #F74E15;
-  margin-top: 22px;
   margin-bottom: -2px;
 }
 

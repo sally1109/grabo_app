@@ -1,7 +1,6 @@
 <template>
   <header>
-    <h3 class="headline_1">Personal</h3>
-    <h1 class="headline_2">Settings</h1>
+    <h1 class="headline_2">Einstellungen</h1>
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">

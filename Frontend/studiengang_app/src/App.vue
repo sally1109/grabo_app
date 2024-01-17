@@ -37,7 +37,7 @@ header {
   position: fixed;
   z-index: 2;
   width: 100vw;
-  height: 138px;
+  height: 80px;
   left: 0;
   top: 0;
   background-color: #fefcfa;
@@ -47,13 +47,13 @@ header {
   font-size: 21px;
   color: #AFB0B8;
   font-weight: 500;
-  margin: 35px 0 -5px 44px;
+  margin: 50px 0 0px 44px;
 }
 
 .headline_2 {
   font-size: 38px;
   font-weight: 500;
-  margin-left: 43px;
+  margin: 50px 0px 0px 43px;
 }
 
 img {

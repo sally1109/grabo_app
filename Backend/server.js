@@ -83,11 +83,11 @@ app.post("/favorites", function (req, res) {
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
       let dataAsObject = JSON.parse(data);
       dataAsObject.push({
-        id: dataAsObject.length,
-        name: req.body.name,
-        ort: req.body.ort,
- 
-      });
+          id: dataAsObject.length,
+          name: req.body.name,
+          ort: req.body.ort,
+          courseId : req.body.courseId,
+      })
       fs.writeFile(filenameFavorites, JSON.stringify(dataAsObject), () => {
         res.writeHead(200, {
           "Content-Type": "application/json",

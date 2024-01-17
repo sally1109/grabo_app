@@ -1,7 +1,6 @@
 <template>
   <header>
-    <h3 class="headline_1">Overview</h3>
-    <h1 class="headline_2">Home</h1>
+    <h1 class="headline_2">Startseite</h1>
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
@@ -15,11 +14,10 @@
   <v-card class="container" id="ListHome" v-for="course in filteredCourses" :key="course.id">
     <div id="div_name">
       <v-card-title @click="dialogVisible=true, defineCourse(course)"> {{ course.sfa }} </v-card-title>
-      <v-card-actions> <!-- Änderung hier von v-card-action auf v-card-actions -->
-        <v-btn class="btn" id="add_btn" density="comfortable" variant="text" @click=" defineCourse(course); addEntry();">
-          <v-icon size="x-large"> {{ isClicked ? 'mdi-star' : 'mdi-star-outline' }} </v-icon>
+        <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click=" defineCourse(course); addEntry();"> 
+          <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
+          <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
         </v-btn>
-      </v-card-actions>
     </div>
     <div id="div_infos" @click="dialogVisible=true, defineCourse(course)">
       <v-icon icon="mdi-map-marker" size="small"></v-icon>
@@ -103,6 +101,7 @@ export default {
         this.defindCourse = course;
         this.favoritRE = course.sfa;
         this.favoritORTE = course.orte;
+        this.favoritID = course.id;
       },
 
       closeDialog(){
@@ -137,21 +136,23 @@ export default {
     handleButtonClick(course) { 
       this.addEntry;
       this.defineCourse(course);
+      
 
     },
 
     addEntry: function () {
-      console.log('Zu sendende Daten:', { name: this.favoritORTE, ort: this.favoritRE });
+      console.log('Zu sendende Daten:', { name: this.favoritORTE, ort: this.favoritRE, courseId: this.favoritID });
 
       axios
         .post("http://" + window.location.hostname + ":8080/favorites/", {
           name : this.favoritRE,
           ort : this.favoritORTE,
+          courseId : this.favoritID
 
         })
         .then((response) => {
-          this.listOfEntries = response.data;
           this.updateKey = uuidV4();
+          console.log(response.data)
         });
     },
     },
@@ -225,10 +226,4 @@ span{
   .v-card-subtitle {
     padding-left: 5px;
   }
-  #add_btn:active {
-    background-color: none;
-  }
-
-
-
 </style>

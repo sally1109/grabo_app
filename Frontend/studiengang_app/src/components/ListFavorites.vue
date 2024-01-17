@@ -2,9 +2,7 @@
   <v-card class="container" id="ListFavorites">
     <div id="div_name">
       <v-card-title> {{ entry.name }} </v-card-title>
-      <v-card-action> 
       <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
-    </v-card-action>
     </div>
     <div id="div_ort">
       <v-icon icon="mdi-map-marker" size="small" ></v-icon>

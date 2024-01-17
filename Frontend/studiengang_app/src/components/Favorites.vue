@@ -1,7 +1,6 @@
 <template>
   <header>
-    <h3 class="headline_1">Saved</h3>
-    <h1 class="headline_2">Favorites</h1>
+    <h1 class="headline_2">Favoriten</h1>
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
