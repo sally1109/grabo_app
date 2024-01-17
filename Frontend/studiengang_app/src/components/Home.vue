@@ -192,12 +192,6 @@ span{
   padding-left: 10px;
 }
 
-#btn_close {
-  border-radius: 13px;
-  margin: 8px -2.5px 0 -2.5px;
-  padding: 12px 15px;
-}
-
 #ListHome {
     display: flex;
     flex-direction: column;
