@@ -33,7 +33,7 @@ const clientCredentials = {
   let ApiUrl_studienangebote = ""; 
   
 
-  function filter_studienangebote(filterWord) {
+  async function filter_studienangebote(filterWord) {
       const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
       console.log('test' , filterWord);
       if (!filterWord) {
@@ -44,7 +44,7 @@ const clientCredentials = {
       const fullUrl = `${baseUrl}?sw=${filterWord}`;
       ApiUrl_studienangebote = fullUrl;
       //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
-      makeRequest_Studienfach();
+      await makeRequest_Studienfach();
   }
   
 // Aufrufe um ein Wort zu filtern
@@ -62,7 +62,7 @@ async function makeRequest_Studienfach() {
         'X-API-Key': clientCredentials.client_id
       },
     });
-    
+
     console.log(response.data);
     extractBundesland(response.data.items);
     extractAbschlussgrad(response.data.items);
@@ -70,51 +70,70 @@ async function makeRequest_Studienfach() {
     extractStudientyp(response.data.items);
     extractStudiengangmodell(response.data.items);
     extractHochschulart(response.data.items);
+
+    res.json(extractedData);
   } catch (error) {
     console.error('Fehler bei der Anfrage:', error.message);
   }
 }
+
+const extractedData = [];
+
 function extractBundesland(items) {
   items.forEach(item => {
     const bundesland = item.studienangebot.region.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
+    //console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
+    extractedData.push({ bundesland, studiengang });
+    //console.log(extractedData);
   });
+  return extractedData;
 }
 function extractAbschlussgrad(items) {
   items.forEach(item => {
     const abschlussgrad = item.studienangebot.abschlussgrad.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
+    //console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
+    extractedData.push({ abschlussgrad, studiengang });
   });
+  return extractedData;
 }
 function extractStudienform(items) {
   items.forEach(item => {
     const studienform = item.studienangebot.studienform.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
+    //console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
+    extractedData.push({ studienform, studiengang });
   });
+  return extractedData;
 }
 function extractStudientyp(items) {
   items.forEach(item => {
     const studientyp = item.studienangebot.studientyp.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
+    //console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
+    extractedData.push({ studientyp, studiengang });
   });
+  return extractedData;
 }
 function extractStudiengangmodell(items) {
   items.forEach(item => {
     const studiengangmodel = item.studienangebot.studiengangmodel.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
+    //console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
+    extractedData.push({ studiengangmodel, studiengang });
+    
   });
+  return extractedData;
 }
 function extractHochschulart(items) {
   items.forEach(item => {
     const hochschulart = item.studienangebot.hochschulart.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
+    //console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
+    extractedData.push({ hochschulart, studiengang });
   });
+  return extractedData;
 }
 
 //makeRequest_Studienfach();
@@ -138,16 +157,22 @@ app.get("/testFilter", async (req, res) => {
   console.log('test');
   try {
     console.log(filterWord);
-    filter_studienangebote(filterWord);
 
+    await filter_studienangebote(filterWord);
+
+    console.log(extractedData);
     console.log('Hier wird der GET-Endpoint ausgegeben');
     console.log(`Filter erfolgreich angewendet für: ${filterWord}`);
-
-    res.status(200).json({ message: "Filter erfolgreich angewendet" });
+    
+    res.status(200).json({ message: "Filter erfolgreich angewendet", extractedData: extractedData });
   } catch (error) {
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
   }
 })
+
+app.get("/extractedData", function (req, res) {
+  res.json(extractedData);
+});
 
 
 //Endpoints
