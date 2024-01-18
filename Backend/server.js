@@ -28,9 +28,42 @@ const clientCredentials = {
   };
   
   //Diese Funktion filtert nach allen geforderten Parametern (bundesländer, abschlussgrade...) und speichert die angaben in Variablen (die noch dem Frontend übergeben werden müssen)
-  const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=Kunst';
+  const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote';
 
+  async function makeRequest_StudienFilter(filterString) {
+    try {
+      const response = await axios.get(apiUrl_StudienFilter, {
+        headers: {
+          'X-API-Key': clientCredentials.client_id,
+        },
+        params: {
+          sw: filterString, // Hier wird der Filterstring als Parameter eingefügt
+        },
+      });
+  
+      console.log(`Studiengänge mit Filter "${filterString}":`);
+  
+      const studienangebote = response.data.studienangebote;
+  
+      for (const studiengang of studienangebote) {
+        console.log(`- Studiengang ${studiengang.key}: ${studiengang.name}`);
+        console.log(`  DkzId: ${studiengang.dkzId}`);
+        console.log(`  Studienform: ${studiengang.studienform}`);
+        console.log(`  Studientyp: ${studiengang.studientyp}`);
+        console.log(`  Studiengangmodell: ${studiengang.studiengangmodell}`);
+        console.log(`  Abschlussgrad: ${studiengang.abschlussgrad}`);
+        console.log(`  Hochschulart: ${studiengang.hochschulart}`);
+      }
+    } catch (error) {
+      console.error('Fehler bei der Anfrage für Studienangebote:', error.message);
+    }
+  }
+  
+  // Beispielaufruf für Studienangebote mit einem bestimmten Filter
+  makeRequest_StudienFilter('Informatik');
+  
 
+/*
 
  async function makeRequest_StudienFilter() {
 
@@ -113,167 +146,8 @@ async function processStudienFilterData() {
   }
   
   processStudienFilterData();
+*/
 
-
-//Diese Funktion gibt alle geforderten Parameter aus der Datenbank in der Konsole aus
-const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
-async function makeRequest_Studienfach() {
-  try {
-    const response = await axios.get(apiUrl_Studienfach, {
-      headers: {
-        'X-API-Key': clientCredentials.client_id
-      },
-    });
-    
-    console.log(response.data);
-    en
-    extractBundesland(response.data.items);
-    extractAbschlussgrad(response.data.items);
-    extractStudienform(response.data.items);
-    extractStudientyp(response.data.items);
-    extractStudiengangmodell(response.data.items);
-    extractHochschulart(response.data.items);
-  } catch (error) {
-    console.error('Fehler bei der Anfrage:', error.message);
-  }
-}
-
-function extractBundesland(items) {
-  items.forEach(item => {
-    const bundesland = item.studienangebot.region.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
-  });
-}
-
-function extractAbschlussgrad(items) {
-  items.forEach(item => {
-    const abschlussgrad = item.studienangebot.abschlussgrad.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
-  });
-}
-
-function extractStudienform(items) {
-  items.forEach(item => {
-    const studienform = item.studienangebot.studienform.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
-  });
-}
-
-function extractStudientyp(items) {
-  items.forEach(item => {
-    const studientyp = item.studienangebot.studientyp.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
-  });
-}
-
-function extractStudiengangmodell(items) {
-  items.forEach(item => {
-    const studiengangmodel = item.studienangebot.studiengangmodel.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
-  });
-}
-
-function extractHochschulart(items) {
-  items.forEach(item => {
-    const hochschulart = item.studienangebot.hochschulart.label;
-    const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
-  });
-}
-    
-    
-  // -------------Anfragen-------------
-
-
-
-
-
-  //Diese Funktion gibt alle Studienfeldgruppen und DkzIds aus
-//Diese Funktion dient nur als Information für die Studienfeldgruppen und ist für die Filterfunktionen unnötig
-const apiUrl_Studienfeldgruppen = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
-async function makeRequest_Studienfeldgruppen() {
-  try {
-    const response = await axios.get(apiUrl_Studienfeldgruppen, {
-      headers: {
-        'X-API-Key': clientCredentials.client_id,
-      },
-    });
-    console.log(response.data);
-    const studienfeldgruppen = response.data.studienfeldgruppen;
-    for (const studienfeldgruppe of studienfeldgruppen) {
-      const { key, name, dkzIds, studienfelder } = studienfeldgruppe;
-      console.log(`Studienfeldgruppe ${key}: ${name}`);
-      console.log(`DkzIds: ${dkzIds}`);
-      
-      for (const studienfeld of studienfelder) {
-        const { key, name, dkzIds } = studienfeld;
-        console.log(`- Studienfeld ${key}: ${name}`);
-        console.log(`  DkzIds: ${dkzIds}`);
-      }
-    }
-  } catch (error) {
-    console.error('Fehler bei der Anfrage:', error.message);
-  }
-}
-
-
-
-/*const apiUrl_Studienfeldgruppen = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
-const apiUrl_Studienganginformationen = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfeldinformationen';
-
-async function makeRequest_Studienfeldgruppen(umkreis, bundesland, studienform, studientyp, studiengangmodell, abschlussgrad, hochschulart) {
-  try {
-    const response = await axios.get(apiUrl_Studienfeldgruppen, {
-      headers: {
-        'X-API-Key': clientCredentials.client_id,
-      },
-      params: {
-        uk: umkreis, // Umkreis in km
-        re: bundesland, // Bundesland
-        sfo: studienform, // Studienform
-        st: studientyp, // Studientyp
-        smo: studiengangmodell, // Studiengangmodell
-        abg: abschlussgrad, // Studiengangsabschlussgrad
-        hsa: hochschulart, // Hochschulart
-      },
-    });
-
-    console.log(`Studiengänge in ${bundesland} im Umkreis von ${umkreis} km:`);
-
-    const studienfeldgruppen = response.data.studienfeldgruppen;
-      // Prüfen, ob dkzIds ein String ist
-      if (typeof dkzIds === 'string') {
-        const dkzArray = dkzIds.split(';');
-
-        for (const dkzId of dkzArray) {
-          const studiengangInfoResponse = await axios.get(`${apiUrl_Studienganginformationen}?dkz=${dkzId}`, {
-            headers: {
-              'X-API-Key': clientCredentials.client_id,
-            },
-          });
-
-        const studiengangInfo = studiengangInfoResponse.data;
-        console.log(`- Studiengang ${studiengangInfo.key}: ${studiengangInfo.name}`);
-        console.log(`  DkzId: ${studiengangInfo.dkzId}`);
-        console.log(`  Studienform: ${studiengangInfo.studienform}`);
-        console.log(`  Studientyp: ${studiengangInfo.studientyp}`);
-        console.log(`  Studiengangmodell: ${studiengangInfo.studiengangmodell}`);
-        console.log(`  Abschlussgrad: ${studiengangInfo.abschlussgrad}`);
-        console.log(`  Hochschulart: ${studiengangInfo.hochschulart}`);
-      }
-    }
-  } catch (error) {
-    console.error('Fehler bei der Anfrage:', error.message);
-  }
-}
-
-// Beispielaufruf für Studiengänge in Bayern im Umkreis von 50 km mit zusätzlichen Parametern
-makeRequest_Studienfeldgruppen(50, 'BY', '1;2', '1', '1;2', '10', '101;106');*/
 
 
 //Endpoints
