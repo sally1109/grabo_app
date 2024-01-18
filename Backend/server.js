@@ -34,6 +34,7 @@ const clientCredentials = {
 
   function filter_studienangebote(filterWord) {
       const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
+      console.log('test' , filterWord);
       if (!filterWord) {
           console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
           return;
@@ -46,8 +47,8 @@ const clientCredentials = {
   }
   
 // Aufrufe um ein Wort zu filtern
-  const filterWord = "Informatik";
-  filter_studienangebote(filterWord);
+  //const filterWord = "Informatik";
+  //filter_studienangebote(filterWord);
   
 
   //Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
@@ -128,20 +129,18 @@ app.post("/fetchData", async (req, res) => {
 });
 
 
+
 app.get("/testFilter", async (req, res) => {
   const filterWord = req.query.filterWord;
+  console.log('test');
   try {
-    // Hier wird der Filter angewendet
     filter_studienangebote(filterWord);
-    
-    // Log-Ausgabe für die Serverkonsole
+
     console.log('Hier wird der GET-Endpoint ausgegeben');
     console.log(`Filter erfolgreich angewendet für: ${filterWord}`);
-    
-    // Antworte dem Client
+
     res.status(200).json({ message: "Filter erfolgreich angewendet" });
   } catch (error) {
-    // Bei einem Fehler antworte mit einem Fehlerstatus
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
   }
 });
