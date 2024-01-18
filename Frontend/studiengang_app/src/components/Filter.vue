@@ -8,9 +8,21 @@
       <v-icon>mdi-magnify</v-icon>
     </v-btn>
 
+    <v-list v-if="searchResults.length > 0">
+    <v-list-item-group>
+      <v-list-item v-for="(result, index) in searchResults" :key="index">
+        <v-list-item-content>
+          <v-list-item-title>{{ result.title }}</v-list-item-title>
+          <!-- Weitere Informationen aus dem Ergebnis können hier angezeigt werden -->
+        </v-list-item-content>
+      </v-list-item>
+    </v-list-item-group>
+  </v-list>
+
     <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
       <v-icon>mdi-filter</v-icon>
     </v-btn>
+
     <!-- Popup-Fenster -->
     <v-dialog v-model="dialog" max-width="600">
       <v-card class="container">
@@ -94,8 +106,10 @@ export default {
         studiengangmodelle: Array,
         hochschularten: Array,
       },
+
   data() {
     return {
+      searchResults: [],
       search_word: 'Informatik',
       dialog: false,
       selectedParameter1: null,
@@ -108,6 +122,29 @@ export default {
   },
 
   methods: {
+
+    async search() {
+      const filterParams = {
+        parameter1: this.selectedParameter1,
+        parameter2: this.selectedParameter2,
+        parameter3: this.selectedParameter3,
+        parameter4: this.selectedParameter4,
+        parameter5: this.selectedParameter5,
+        parameter6: this.selectedParameter6,
+        search_word: this.search_word,
+      };
+
+      try {
+        const response = await axios.post("http://localhost:8080/searchData", filterParams);
+        console.log(response.data);
+
+        // Hier setzen Sie die Suchergebnisse in das Datenfeld
+        this.searchResults = response.data;
+      } catch (error) {
+        console.error("Fehler bei der Suche:", error.message);
+      }
+    },
+  
     async fetchDataFromBackend(filterParams) {
     try {
       const response = await axios.post("http://localhost:8080/fetchData", filterParams);
