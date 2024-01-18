@@ -41,7 +41,7 @@ const clientCredentials = {
   
       const fullUrl = `${baseUrl}?sw=${filterWord}`;
       ApiUrl_studienangebote = fullUrl;
-      console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
+      //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
 
   }
   
@@ -50,7 +50,7 @@ const clientCredentials = {
   filter_studienangebote(filterWord);
   
 
-  //Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen den gelisteten Parameter aus.
+  //Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
 async function makeRequest_Studienfach() {
   try {
     const response = await axios.get(ApiUrl_studienangebote, {
@@ -74,42 +74,42 @@ function extractBundesland(items) {
   items.forEach(item => {
     const bundesland = item.studienangebot.region.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
+    //console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
   });
 }
 function extractAbschlussgrad(items) {
   items.forEach(item => {
     const abschlussgrad = item.studienangebot.abschlussgrad.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
+    //console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudienform(items) {
   items.forEach(item => {
     const studienform = item.studienangebot.studienform.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
+    //console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudientyp(items) {
   items.forEach(item => {
     const studientyp = item.studienangebot.studientyp.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
+    //console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudiengangmodell(items) {
   items.forEach(item => {
     const studiengangmodel = item.studienangebot.studiengangmodel.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
+    //console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
   });
 }
 function extractHochschulart(items) {
   items.forEach(item => {
     const hochschulart = item.studienangebot.hochschulart.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
+    //console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
   });
 }
 
@@ -120,20 +120,28 @@ makeRequest_Studienfach();
 
 app.post("/fetchData", async (req, res) => {
   try {
-    const filterParams = req.body;
+    makeRequest_Studienfach();
     res.status(200).json({ message: "Daten erfolgreich abgerufen" });
   } catch (error) {
     res.status(500).json({ error: "Fehler beim Abrufen der Daten" });
   }
 });
 
-// GET-Endpoint zum Testen des Filters
+
 app.get("/testFilter", async (req, res) => {
   const filterWord = req.query.filterWord;
   try {
+    // Hier wird der Filter angewendet
     filter_studienangebote(filterWord);
+    
+    // Log-Ausgabe für die Serverkonsole
+    console.log('Hier wird der GET-Endpoint ausgegeben');
+    console.log(`Filter erfolgreich angewendet für: ${filterWord}`);
+    
+    // Antworte dem Client
     res.status(200).json({ message: "Filter erfolgreich angewendet" });
   } catch (error) {
+    // Bei einem Fehler antworte mit einem Fehlerstatus
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
   }
 });
