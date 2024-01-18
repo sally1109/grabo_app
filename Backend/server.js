@@ -52,32 +52,44 @@ const clientCredentials = {
   //filter_studienangebote(filterWord);
   
 
-  //Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
-async function makeRequest_Studienfach() {
-  console.log(ApiUrl_studienangebote);
-  try {
-    
-    const response = await axios.get(ApiUrl_studienangebote, {
-      headers: {
-        'X-API-Key': clientCredentials.client_id
-      },
-    });
 
-    console.log(response.data);
-    extractBundesland(response.data.items);
-    extractAbschlussgrad(response.data.items);
-    extractStudienform(response.data.items);
-    extractStudientyp(response.data.items);
-    extractStudiengangmodell(response.data.items);
-    extractHochschulart(response.data.items);
-
-    res.json(extractedData);
-  } catch (error) {
-    console.error('Fehler bei der Anfrage:', error.message);
-  }
-}
 
 const extractedData = [];
+
+
+function extractDataInArray(data) {
+
+  extractedData.push(data);
+}
+
+async function makeRequest_Studienfach() {
+    try {
+        const response = await fetch(ApiUrl_studienangebote);
+        if (!response.ok) {
+            console.error(`Fehler beim Abrufen der Daten. Statuscode: ${response.status}`);
+            return;
+        }
+
+        const data = await response.json();
+        if (!data) {
+            console.error("Keine Daten erhalten.");
+            return;
+        }
+
+        // Hier können Sie die Daten in das Array speichern
+        extractedData.push({data});
+
+        // Beispiel: Loggen Sie das aktualisierte Array
+        console.log("Aktualisiertes Datenarray:", extractedData);
+
+        // Hier können Sie weitere Verarbeitungsschritte mit dem Array durchführen
+        // ...
+
+    } catch (error) {
+        console.error("Fehler bei der Anfrage:", error);
+    }
+}
+
 
 function extractBundesland(items) {
   items.forEach(item => {
@@ -163,7 +175,7 @@ app.get("/testFilter", async (req, res) => {
     console.log(extractedData);
     console.log('Hier wird der GET-Endpoint ausgegeben');
     console.log(`Filter erfolgreich angewendet für: ${filterWord}`);
-    
+
     res.status(200).json({ message: "Filter erfolgreich angewendet", extractedData: extractedData });
   } catch (error) {
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
