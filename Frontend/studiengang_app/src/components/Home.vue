@@ -4,7 +4,7 @@
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
-  <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" />
+  <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
   <DetailsCourse 
     v-model="dialogVisible"
     :selectedCourse="defindCourse"
@@ -59,6 +59,7 @@ export default {
       favoritRE : '',
       favoritORTE : '',
       daten: {},
+      dkzIds: [],
 
       filterParams: {
         parameter1: '',
@@ -124,21 +125,18 @@ export default {
         this.filterParams.parameter5 = '';
         this.filterParams.parameter6 = '';
       },
-
-      addRemoveFavorite() {
-        this.isClicked = !this.isClicked;
-        console.log(this.isClicked);
-        if (this.isClicked == true){
-          console.log(this.isClicked)
-        } else {
-          console.log(this.isClicked)
-        }
+      handleButtonClick(course) { 
+        this.addEntry;
+        this.defineCourse(course);
       },
-    handleButtonClick(course) { 
-      this.addEntry;
-      this.defineCourse(course);
-      
-
+      search : function (e){
+      axios.get("http://localhost:8080/testFilter",{
+        params: {
+          filterWord: e.filterWord,
+        }
+      }).then(response => {
+          console.log('Server response:', response.data);
+        })
     },
 
     addEntry: function () {
@@ -155,7 +153,7 @@ export default {
           this.updateKey = uuidV4();
           console.log(response.data)
         });
-    },
+    }
     },
 
     mounted() {
@@ -164,7 +162,8 @@ export default {
           this.listOfCourses = response.data;
           console.log(this.listOfCourses);
         });
-    axios
+
+      axios
       .get("http://localhost:8080/data/").then(response => {
         this.daten = response.data;
         console.log(this.daten)

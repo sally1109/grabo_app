@@ -4,8 +4,8 @@
     <!-- Suchleiste -->
     <v-text-field id="Search" v-model="search_word" label="Suche nach Studiengang" variant="underlined"></v-text-field>
 
-    <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="search" icon="mdi-filter">
-      <v-icon>mdi-search</v-icon>
+    <v-btn class="btn" id="search_btn" density="comfortable" variant="text" @click="search" icon="mdi-filter">
+      <v-icon>mdi-magnify</v-icon>
     </v-btn>
 
     <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
@@ -117,12 +117,11 @@ export default {
     }
   },
     search : function (){
-      axios.get("http://localhost:8080/testFilter",{
-        params: {
-          filterWord: this.search_word,
-        }
+      this.$emit("search", {
+        filterWord: this.search_word,
       })
     },
+
     openDialog() {
       this.dialog = true;
     },
