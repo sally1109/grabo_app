@@ -111,7 +111,7 @@ export default {
     async fetchDataFromBackend(filterParams) {
     try {
       const response = await axios.post("http://localhost:8080/fetchData", filterParams);
-      console.log(response.data); // Hier kannst du die Daten im Frontend verwenden
+      console.log(response.data); 
     } catch (error) {
       console.error("Fehler beim Abrufen der Daten:", error.message);
     }
