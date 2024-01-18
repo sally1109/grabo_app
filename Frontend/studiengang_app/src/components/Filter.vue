@@ -3,6 +3,7 @@
   <div class="container" id="Filter">
     <!-- Suchleiste -->
     <v-text-field id="Search" v-model="search" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+    <Filter @filter-changed="handleFilterChange" />
     <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
       <v-icon>mdi-filter</v-icon>
     </v-btn>
@@ -104,14 +105,20 @@ export default {
 
   methods: {
     //ruft die Filterinformationen vom Backend ab
-    async fetchDataFromBackend(filterParams) {
-      try {
-        const response = await axios.post("http://localhost:8080/fetchData", filterParams);
-        console.log(response.data); // Hier kannst du die Daten im Frontend verwenden
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Daten:", error.message);
-      }
+    handleFilterChange(filterParams) {
+      // Aktualisiere die Daten oder führe andere Aktionen durch
+      // basierend auf den aktualisierten Filterparametern
+      console.log("Filterparameter aktualisiert:", filterParams);
     },
+    
+    async fetchDataFromBackend(filterParams) {
+    try {
+      const response = await axios.post("http://localhost:8080/fetchData", filterParams);
+      console.log(response.data); // Hier kannst du die Daten im Frontend verwenden
+    } catch (error) {
+      console.error("Fehler beim Abrufen der Daten:", error.message);
+    }
+  },
 
     openDialog() {
       this.dialog = true;
