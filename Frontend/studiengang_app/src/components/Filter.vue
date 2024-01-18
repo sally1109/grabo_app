@@ -2,7 +2,12 @@
 <template>
   <div class="container" id="Filter">
     <!-- Suchleiste -->
-    <v-text-field id="Search" v-model="search" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+    <v-text-field id="Search" v-model="search_word" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+
+    <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="search" icon="mdi-filter">
+      <v-icon>mdi-search</v-icon>
+    </v-btn>
+
     <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
       <v-icon>mdi-filter</v-icon>
     </v-btn>
@@ -91,7 +96,7 @@ export default {
       },
   data() {
     return {
-      search: '',
+      search_word: 'Informatik',
       dialog: false,
       selectedParameter1: null,
       selectedParameter2: null,
@@ -111,7 +116,13 @@ export default {
       console.error("Fehler beim Abrufen der Daten:", error.message);
     }
   },
-
+    search : function (){
+      axios.get("http://localhost:8080/testFilter",{
+        params: {
+          filterWord: this.search_word,
+        }
+      })
+    },
     openDialog() {
       this.dialog = true;
     },
@@ -134,7 +145,7 @@ export default {
         parameter4: this.selectedParameter4,
         parameter5: this.selectedParameter5,
         parameter6: this.selectedParameter6,
-        search: this.search,
+        search_word: this.search_word,
       };
       this.$emit('filter-changed', filterParams);
       this.dialog = false;
