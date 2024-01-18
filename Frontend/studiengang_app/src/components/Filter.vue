@@ -10,10 +10,9 @@
 
     <v-list v-if="searchResults.length > 0">
     <v-list-item-group>
-      <v-list-item v-for="(result, index) in searchResults" :key="index">
+      <v-list-item v-for="(items, index) in searchResults" :key="index">
         <v-list-item-content>
-          <v-list-item-title>{{ result.title }}</v-list-item-title>
-          <!-- Weitere Informationen aus dem Ergebnis können hier angezeigt werden -->
+          <v-list-item-title>{{ items.bundeslaender }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list-item-group>
@@ -135,10 +134,8 @@ export default {
       };
 
       try {
-        const response = await axios.post("http://localhost:8080/searchData", filterParams);
+        const response = await axios.post("http://localhost:8080/testFilter", filterParams);
         console.log(response.data);
-
-        // Hier setzen Sie die Suchergebnisse in das Datenfeld
         this.searchResults = response.data;
       } catch (error) {
         console.error("Fehler bei der Suche:", error.message);
