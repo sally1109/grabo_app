@@ -27,10 +27,58 @@ const clientCredentials = {
     grant_type: 'client_credentials'
   };
   
-  //Diese Funktion filtert nach allen geforderten Parametern (bundesländer, abschlussgrade...) und speichert die angaben in Variablen (die noch dem Frontend übergeben werden müssen)
-  const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote';
 
-  async function makeRequest_StudienFilter(filterString) {
+
+
+  let ApiUrl_studienangebote = ""; 
+
+  function filter_studienangebote(filterWord) {
+
+      const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
+  
+ 
+      if (!filterWord) {
+          console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
+          return;
+      }
+  
+ 
+      const fullUrl = `${baseUrl}?sw=${filterWord}`;
+  
+   
+      ApiUrl_studienangebote = fullUrl;
+  
+  
+      console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
+  
+
+  }
+  
+// Aufrufe um ein Wort zu filtern
+  const filterWord = "Informatik";
+  filter_studienangebote(filterWord);
+  
+
+  console.log("Neue API-URL:", ApiUrl_studienangebote);
+
+async function makeRequestSuchwort() {
+  try {
+    const response = await axios.get(ApiUrl_studienangebote, {
+      headers: {
+        'X-API-Key': clientCredentials.client_id,
+      },
+
+    });
+    console.log(response.data);
+  } catch (error) {
+    console.error('Fehler bei der Anfrage:', error.message);
+    throw new Error('Fehler bei Token-Erstellimg 02', error.message);
+  }
+}
+makeRequestSuchwort();
+
+
+ /* async function makeRequest_StudienFilter(filterString) {
     try {
       const response = await axios.get(apiUrl_StudienFilter, {
         headers: {
@@ -58,12 +106,8 @@ const clientCredentials = {
       console.error('Fehler bei der Anfrage für Studienangebote:', error.message);
     }
   }
-  
+  */
   // Beispielaufruf für Studienangebote mit einem bestimmten Filter
-  makeRequest_StudienFilter('Informatik');
-  
-
-/*
 
  async function makeRequest_StudienFilter() {
 
@@ -89,7 +133,8 @@ const clientCredentials = {
       console.error('Fehler bei der Anfrage:', error.message);
     }
   }
-  // Now you can use the extracted data outside the function
+  makeRequest_StudienFilter('Informatik');
+ /* // Now you can use the extracted data outside the function
 async function processStudienFilterData() {
   try {
     const filterData = await makeRequest_StudienFilter();
@@ -146,8 +191,8 @@ async function processStudienFilterData() {
   }
   
   processStudienFilterData();
-*/
 
+*/
 
 
 //Endpoints
