@@ -8,16 +8,6 @@
       <v-icon>mdi-magnify</v-icon>
     </v-btn>
 
-    <v-list v-if="searchResults.length > 0">
-    <v-list-item-group>
-      <v-list-item v-for="(items, index) in searchResults" :key="index">
-        <v-list-item-content>
-          <v-list-item-title>{{ items.bundeslaender }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list-item-group>
-  </v-list>
-
     <v-btn class="btn" id="filter_btn" density="comfortable" variant="text" @click="openDialog" icon="mdi-filter">
       <v-icon>mdi-filter</v-icon>
     </v-btn>
@@ -117,12 +107,18 @@ export default {
       selectedParameter4: null,
       selectedParameter5: null,
       selectedParameter6: null,
+      extractedData: [],
     };
+  },
+  created() {
+    this.fetchDataFromBackend();
   },
 
   methods: {
 
     async search() {
+      console.log("Daten aus dem Backend:", this.extractedData);
+
       const filterParams = {
         parameter1: this.selectedParameter1,
         parameter2: this.selectedParameter2,
@@ -134,27 +130,43 @@ export default {
       };
 
       try {
+        console.log('Ausgabe Y');
         const response = await axios.post("http://localhost:8080/testFilter", filterParams);
-        console.log(response.data);
+        console.log(response.data.extractedData);
         this.searchResults = response.data;
       } catch (error) {
         console.error("Fehler bei der Suche:", error.message);
       }
     },
-  
-    async fetchDataFromBackend(filterParams) {
+
+    async fetchDataFromBackend() {
+      console.log('Ausgabe X');
+      try {
+        const response = await axios.post("http://localhost:8080/fetchData");
+        console.log(response.data);
+ 
+        this.extractedData = response.data.extractedData;
+        console.log(this.extractedData);
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error.message);
+      }
+    },
+
+    /*async fetchDataFromBackend(filterParams) {
     try {
       const response = await axios.post("http://localhost:8080/fetchData", filterParams);
       console.log(response.data); 
     } catch (error) {
       console.error("Fehler beim Abrufen der Daten:", error.message);
     }
-  },
+  },*/
     search : function (){
       this.$emit("search", {
         filterWord: this.search_word,
       })
     },
+
+
 
     openDialog() {
       this.dialog = true;
