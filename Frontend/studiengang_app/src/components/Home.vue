@@ -5,12 +5,22 @@
   </header>
   <div class="container_pages">
   <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
+  <showData  v-if="show" show = false>
+    <v-list v-if="extractedData.length != 0">
+      <v-list-item-group>
+        <v-list-item v-for="(items, index) in extractedData" :key="index">
+          <v-list-item-content>
+            <v-list-item-title>{{ items}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
+</showData>
   <DetailsCourse 
     v-model="dialogVisible"
     :selectedCourse="defindCourse"
     @closeDialog="closeDialog"
     />
-
   <v-card class="container" id="ListHome" v-for="course in filteredCourses" :key="course.id">
     <div id="div_name">
       <v-card-title @click="dialogVisible=true, defineCourse(course)"> {{ course.sfa }} </v-card-title>
@@ -19,6 +29,9 @@
           <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
         </v-btn>
     </div>
+
+    
+
     <div id="div_infos" @click="dialogVisible=true, defineCourse(course)">
       <v-icon icon="mdi-map-marker" size="small"></v-icon>
       <v-card-subtitle> {{ course.orte }} </v-card-subtitle>
@@ -60,6 +73,8 @@ export default {
       favoritORTE : '',
       daten: {},
       dkzIds: [],
+      extractedData: [],
+      show:false,
 
       filterParams: {
         parameter1: '',
@@ -135,7 +150,9 @@ export default {
           filterWord: e.filterWord,
         }
       }).then(response => {
-          console.log('Server response:', response.data);
+          console.log('Server response:', response.data.extractedData);
+          this.show = true;
+          this.extractedData = response.data.extractedData;
         })
     },
 
