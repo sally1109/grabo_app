@@ -78,42 +78,42 @@ function extractBundesland(items) {
   items.forEach(item => {
     const bundesland = item.studienangebot.region.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
+    console.log(`Bundesland: ${bundesland}, Studiengang: ${studiengang}`);
   });
 }
 function extractAbschlussgrad(items) {
   items.forEach(item => {
     const abschlussgrad = item.studienangebot.abschlussgrad.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
+    console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudienform(items) {
   items.forEach(item => {
     const studienform = item.studienangebot.studienform.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
+    console.log(`Studienform: ${studienform}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudientyp(items) {
   items.forEach(item => {
     const studientyp = item.studienangebot.studientyp.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
+    console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
   });
 }
 function extractStudiengangmodell(items) {
   items.forEach(item => {
     const studiengangmodel = item.studienangebot.studiengangmodel.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
+    console.log(`Studiengangmodel: ${studiengangmodel}, Studiengang: ${studiengang}`);
   });
 }
 function extractHochschulart(items) {
   items.forEach(item => {
     const hochschulart = item.studienangebot.hochschulart.label;
     const studiengang = item.studienangebot.studiBezeichnung;
-    //console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
+    console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
   });
 }
 
@@ -147,7 +147,7 @@ app.get("/testFilter", async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
   }
-}).then(response)
+})
 
 
 //Endpoints
