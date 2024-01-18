@@ -103,6 +103,16 @@ export default {
   },
 
   methods: {
+    //ruft die Filterinformationen vom Backend ab
+    async fetchDataFromBackend(filterParams) {
+      try {
+        const response = await axios.post("http://localhost:8080/fetchData", filterParams);
+        console.log(response.data); // Hier kannst du die Daten im Frontend verwenden
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error.message);
+      }
+    },
+
     openDialog() {
       this.dialog = true;
     },
@@ -125,9 +135,11 @@ export default {
         parameter4: this.selectedParameter4,
         parameter5: this.selectedParameter5,
         parameter6: this.selectedParameter6,
-      }
+        search: this.search,
+      };
       this.$emit('filter-changed', filterParams);
       this.dialog = false;
+      this.fetchDataFromBackend(filterParams);
     },
     setBackendData() {
           this.selectedParameter1 = this.bundeslaender;
