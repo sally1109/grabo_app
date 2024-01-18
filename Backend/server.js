@@ -1,3 +1,4 @@
+
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
@@ -7,9 +8,7 @@ const port = 8080;
 const filenameData = __dirname + "/data.json";
 const filenameFavorites = __dirname + "/favorites.json";
 const filenameCourse = __dirname + "/course.json";
-
 const axios = require('axios');
-
 //Middleware
 app.use(express.json()); //for parsing application/json
 app.use(cors()); //for configuring Cross-Origin Resource Sharing (CORS)
@@ -21,7 +20,6 @@ app.use(log);
 app.use(morgan("dev"));
 
 
-
 // Client Credentials für die Authentifizierung
 const clientCredentials = {
     client_id: '5aee2cfe-1709-48a9-951d-eb48f8f73a74',
@@ -29,11 +27,13 @@ const clientCredentials = {
     grant_type: 'client_credentials'
   };
   
-
   //Diese Funktion filtert nach allen geforderten Parametern (bundesländer, abschlussgrade...) und speichert die angaben in Variablen (die noch dem Frontend übergeben werden müssen)
   const apiUrl_StudienFilter = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=IT-Security-Manager';
 
+
+
   async function makeRequest_StudienFilter() {
+
     try {
       const response = await axios.get(apiUrl_StudienFilter, {
         headers: {
@@ -42,22 +42,46 @@ const clientCredentials = {
       });
   
       // Funktionen aufrufen, um spezifische Parameter mit Studiengang auszugeben
-      const bundeslaender = extractBundesland(response.data.items);
-      const abschlussgrade = extractAbschlussgrad(response.data.items);
-      const studienformen = extractStudienform(response.data.items);
-      const studientypen = extractStudientyp(response.data.items);
-      const studiengangmodelle = extractStudiengangmodell(response.data.items);
-      const hochschularten = extractHochschulart(response.data.items);
-      
-
-      
-
+      return {
+        bundeslaender: extractBundesland(response.data.items),
+        abschlussgrade: extractAbschlussgrad(response.data.items),
+        studienformen: extractStudienform(response.data.items),
+        studientypen: extractStudientyp(response.data.items),
+        studiengangmodelle: extractStudiengangmodell(response.data.items),
+        hochschularten: extractHochschulart(response.data.items),
+      };
       
   
     } catch (error) {
       console.error('Fehler bei der Anfrage:', error.message);
     }
   }
+  // Now you can use the extracted data outside the function
+async function processStudienFilterData() {
+  try {
+    const filterData = await makeRequest_StudienFilter();
+    
+    // Access the data like this
+    const filterParams = {
+      bundeslaender: filterData.bundeslaender,
+      abschlussgrade: filterData.abschlussgrade,
+      studienformen: filterData.studienformen,
+      studientypen: filterData.studientypen,
+      studiengangmodelle: filterData.studiengangmodelle,
+      hochschularten: filterData.hochschularten,
+    };
+    console.log('Bundesländer:', filterParams.bundeslaender);
+    console.log('Abschlussgrade:', filterParams.abschlussgrade);
+    console.log('Studienformen:', filterParams.studienformen);
+    console.log('Studientypen:', filterParams.studientypen);
+    console.log('Studiengangmodelle:', filterParams.studiengangmodelle);
+    console.log('Hochschularten:', filterParams.hochschularten);
+  } catch (error) {
+    // Handle errors here
+    console.error('Error processing filter data:', error.message);
+  }
+}
+processStudienFilterData();
   
  
   function extractBundesland(items) {
@@ -92,10 +116,8 @@ const clientCredentials = {
 
 
 
-
 //Diese Funktion gibt alle geforderten Parameter aus der Datenbank in der Konsole aus
 const apiUrl_Studienfach = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote?sw=IT-Security-Manager';
-
 async function makeRequest_Studienfach() {
   try {
     const response = await axios.get(apiUrl_Studienfach, {
@@ -103,10 +125,8 @@ async function makeRequest_Studienfach() {
         'X-API-Key': clientCredentials.client_id
       },
     });
-
     
     console.log(response.data);
-
     en
     extractBundesland(response.data.items);
     extractAbschlussgrad(response.data.items);
@@ -114,12 +134,10 @@ async function makeRequest_Studienfach() {
     extractStudientyp(response.data.items);
     extractStudiengangmodell(response.data.items);
     extractHochschulart(response.data.items);
-
   } catch (error) {
     console.error('Fehler bei der Anfrage:', error.message);
   }
 }
-
 
 function extractBundesland(items) {
   items.forEach(item => {
@@ -129,7 +147,6 @@ function extractBundesland(items) {
   });
 }
 
-
 function extractAbschlussgrad(items) {
   items.forEach(item => {
     const abschlussgrad = item.studienangebot.abschlussgrad.label;
@@ -137,7 +154,6 @@ function extractAbschlussgrad(items) {
     console.log(`Studiengangsabschlussgrad: ${abschlussgrad}, Studiengang: ${studiengang}`);
   });
 }
-
 
 function extractStudienform(items) {
   items.forEach(item => {
@@ -147,7 +163,6 @@ function extractStudienform(items) {
   });
 }
 
-
 function extractStudientyp(items) {
   items.forEach(item => {
     const studientyp = item.studienangebot.studientyp.label;
@@ -155,7 +170,6 @@ function extractStudientyp(items) {
     console.log(`Studientyp: ${studientyp}, Studiengang: ${studiengang}`);
   });
 }
-
 
 function extractStudiengangmodell(items) {
   items.forEach(item => {
@@ -165,7 +179,6 @@ function extractStudiengangmodell(items) {
   });
 }
 
-
 function extractHochschulart(items) {
   items.forEach(item => {
     const hochschulart = item.studienangebot.hochschulart.label;
@@ -173,15 +186,10 @@ function extractHochschulart(items) {
     console.log(`Hochschulart: ${hochschulart}, Studiengang: ${studiengang}`);
   });
 }
-
     
     
   // -------------Anfragen-------------
-
-  //makeRequest_Studienfach();
   makeRequest_StudienFilter();
- // makeRequest_Studienfeldgruppen()
-  //console.log('API-URL für Studienfach:', apiUrl_Studienfach);
 
 
 
@@ -189,7 +197,6 @@ function extractHochschulart(items) {
   //Diese Funktion gibt alle Studienfeldgruppen und DkzIds aus
 //Diese Funktion dient nur als Information für die Studienfeldgruppen und ist für die Filterfunktionen unnötig
 const apiUrl_Studienfeldgruppen = 'https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienfelder';
-
 async function makeRequest_Studienfeldgruppen() {
   try {
     const response = await axios.get(apiUrl_Studienfeldgruppen, {
@@ -197,23 +204,15 @@ async function makeRequest_Studienfeldgruppen() {
         'X-API-Key': clientCredentials.client_id,
       },
     });
-
     console.log(response.data);
-
     const studienfeldgruppen = response.data.studienfeldgruppen;
-
     for (const studienfeldgruppe of studienfeldgruppen) {
-
       const { key, name, dkzIds, studienfelder } = studienfeldgruppe;
-
       console.log(`Studienfeldgruppe ${key}: ${name}`);
       console.log(`DkzIds: ${dkzIds}`);
       
-
       for (const studienfeld of studienfelder) {
-
         const { key, name, dkzIds } = studienfeld;
-
         console.log(`- Studienfeld ${key}: ${name}`);
         console.log(`  DkzIds: ${dkzIds}`);
       }
@@ -226,7 +225,6 @@ async function makeRequest_Studienfeldgruppen() {
 
 
 
-
 //Endpoints
 app.put("/data/:id", function (req, res) {
     fs.readFile(filenameData, "utf8", function (err, data) {
@@ -234,7 +232,6 @@ app.put("/data/:id", function (req, res) {
         dataAsObject[req.params.id].name = req.body.name;
         dataAsObject[req.params.id].bundesland = req.body.bundesland;
         dataAsObject[req.params.id].nc = req.body.nc;
-
         fs.writeFile(filenameData, JSON.stringify(dataAsObject), () => {
             res.writeHead(200, {
                 "Content-Type": "application/json",
@@ -243,7 +240,6 @@ app.put("/data/:id", function (req, res) {
         });
     });
 });
-
 app.get("/data", function (req, res) {
     fs.readFile(filenameData, "utf8", function (err, data) {
         res.writeHead(200, {
@@ -252,7 +248,6 @@ app.get("/data", function (req, res) {
         res.end(data);
     });
 });
-
 app.get("/favorites", function (req, res) {
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
         res.writeHead(200, {
@@ -261,7 +256,6 @@ app.get("/favorites", function (req, res) {
         res.end(data);
     });
 });
-
 
 //Api-Endpunkt zum Abrufen aller Daten
 app.get("/course", function (req, res) {
@@ -272,7 +266,6 @@ app.get("/course", function (req, res) {
         res.end(data);
     });
 });
-
 app.delete("/favorites/:id", function (req, res) {
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
         let dataAsObject = JSON.parse(data);
@@ -285,7 +278,6 @@ app.delete("/favorites/:id", function (req, res) {
         });
     });
 });
-
 app.post("/favorites", function (req, res) {
     console.log('Angekommene Daten:', req.body);
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
@@ -304,7 +296,6 @@ app.post("/favorites", function (req, res) {
       });
     });
   });
-
 //Api zum Abfragen einer bestimmten Id
 app.get("/course/:id", function (req, res) {
     fs.readFile(filenameCourse, "utf8", function (err, data) {
@@ -315,7 +306,6 @@ app.get("/course/:id", function (req, res) {
         res.end(JSON.stringify(dataAsObject));
     });
 });
-
 
 
 
