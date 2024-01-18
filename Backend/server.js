@@ -143,33 +143,27 @@ function extractHochschulart(items) {
 makeRequest_Studienfach();
 
 
-
-app.post("/fetchData", (req, res) => {
-  const filterParams = req.body;
-
-  // Überprüfe, ob das Filterwort vorhanden ist
-  if (!filterParams.filterWord) {
-      res.status(400).json({ error: "Filterwort fehlt" });
-      return;
+//Endpunkte für dne Filter
+app.post("/fetchData", async (req, res) => {
+  try {
+    const filterParams = req.body;
+    res.status(200).json({ message: "Daten erfolgreich abgerufen" });
+  } catch (error) {
+    res.status(500).json({ error: "Fehler beim Abrufen der Daten" });
   }
-
-  // Führe die Filterlogik durch, indem du die Funktion filter_studienangebote aufrufst
-  filter_studienangebote(filterParams.filterWord);
-
-  // Führe die API-Anfrage durch
-  makeRequest_Studienfach()
-      .then(responseData => {
-          // Hier kannst du weitere Filterlogik anwenden, wenn nötig
-          // ...
-
-          // Sende die gefilterten Daten als JSON-Antwort
-          res.json(responseData);
-      })
-      .catch(error => {
-          console.error("Fehler bei der Anfrage:", error.message);
-          res.status(500).json({ error: "Interner Serverfehler" });
-      });
 });
+
+// GET-Endpoint zum Testen des Filters
+app.get("/testFilter", async (req, res) => {
+  const filterWord = req.query.filterWord;
+  try {
+    filter_studienangebote(filterWord);
+    res.status(200).json({ message: "Filter erfolgreich angewendet" });
+  } catch (error) {
+    res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
+  }
+});
+
 
 //Endpoints
 app.put("/data/:id", function (req, res) {
