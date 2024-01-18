@@ -31,6 +31,7 @@ const clientCredentials = {
 //BasisUrl wird aufgerufen und aufgeteilt. Das Suchwort (filterword) wird hinten an die Url drangehängt, und die Url in eine "fullUrl" gespeichert und zurückgegeben.
 
   let ApiUrl_studienangebote = ""; 
+  
 
   function filter_studienangebote(filterWord) {
       const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
@@ -43,17 +44,19 @@ const clientCredentials = {
       const fullUrl = `${baseUrl}?sw=${filterWord}`;
       ApiUrl_studienangebote = fullUrl;
       //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
-
+      makeRequest_Studienfach();
   }
   
 // Aufrufe um ein Wort zu filtern
-  //const filterWord = "Informatik";
+ // const filterWord = "Informatik";
   //filter_studienangebote(filterWord);
   
 
   //Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
 async function makeRequest_Studienfach() {
+  console.log(ApiUrl_studienangebote);
   try {
+    
     const response = await axios.get(ApiUrl_studienangebote, {
       headers: {
         'X-API-Key': clientCredentials.client_id
@@ -114,7 +117,7 @@ function extractHochschulart(items) {
   });
 }
 
-makeRequest_Studienfach();
+//makeRequest_Studienfach();
 
 
 //Hier sind Post und Get Endpunkte für die Filter
@@ -134,6 +137,7 @@ app.get("/testFilter", async (req, res) => {
   const filterWord = req.query.filterWord;
   console.log('test');
   try {
+    console.log(filterWord);
     filter_studienangebote(filterWord);
 
     console.log('Hier wird der GET-Endpoint ausgegeben');
@@ -143,7 +147,7 @@ app.get("/testFilter", async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
   }
-});
+}).then(response)
 
 
 //Endpoints
