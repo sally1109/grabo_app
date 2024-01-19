@@ -5,7 +5,7 @@
   </header>
   <div class="container_pages">
     <ListFavorites v-for="(singleEntry, index) of listOfEntries.slice().reverse()" :key="index" :entry="singleEntry"
-      :index="listOfEntries.length - index - 1" @favoritesRemoved="removeFavorites">
+      :index="listOfEntries.length - index - 1" @favoritesRemoved="removeFavorites" @openInfo="openInfo">
     </ListFavorites>
     <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
   </div>
@@ -28,7 +28,9 @@ export default {
   },
   data: function () {
     return {
-      listOfEntries: []
+      listOfEntries: [],
+      dialogVisible: false,
+      definedCourse: [],
     };
   },
   methods: {
@@ -42,7 +44,10 @@ export default {
     openInfo(e) {
         this.dialogVisible = true;
         this.definedCourse = e.data;
-      },
+    },
+    closeDialog(){
+      this.dialogVisible = false;
+    },
   },
   mounted() {
     axios

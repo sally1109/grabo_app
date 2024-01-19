@@ -1,12 +1,12 @@
 <template>
-  <v-card class="container" id="ListFavorites"  @click="openInfo(singleEntry)">
+  <v-card class="container" id="ListFavorites">
     <div id="div_name">
-      <v-card-title> {{ entry.name }} </v-card-title>
+      <v-card-title  @click="openInfo(entry)"> {{ entry.data.data.studiBezeichnung }} </v-card-title>
       <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
     </div>
-    <div id="div_ort">
+    <div id="div_ort"  @click="openInfo(entry)">
       <v-icon icon="mdi-map-marker" size="small" ></v-icon>
-      <v-card-subtitle prepend-icon="mdi-map-marker"> {{ entry.ort }} </v-card-subtitle>
+      <v-card-subtitle> {{ entry.data.data.studienort.postleitzahl }} {{ entry.data.data.studienort.ort }} </v-card-subtitle>
     </div>
   </v-card>
 </template>
@@ -22,8 +22,9 @@ export default {
       });
     },
     openInfo: function (course) {
+      console.log(course);
         this.$emit("openInfo", {
-            data: course
+            data: course.data
         })
       },
   }

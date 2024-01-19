@@ -3,8 +3,8 @@
       <div id="div_name">
         <v-card-title @click="openInfo(listedCourse)"> {{ listedCourse.data.studiBezeichnung }} </v-card-title>
           <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click="defineCourse(listedCourse), addFavorite()"> 
-            <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
-            <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
+            <v-icon size="large" v-if="checkFavorite(listedCourse)"> {{ 'mdi-star'}} </v-icon>
+            <v-icon size="large" v-else> {{ 'mdi-star-outline'}} </v-icon>
           </v-btn>
       </div>
       <div id="div_infos" @click="openInfo(listedCourse)">
@@ -16,6 +16,8 @@
   
   <script>
 
+  import axios from "axios"
+
   export default {
     name: "ListCourse",
     props: ["listedCourse", "index"],
@@ -23,7 +25,8 @@
     return {
       dialogVisible: false,
       definedCourse: [],
-      isClicked: false
+      isClicked: false,
+      favorites: []
     }},
     methods: {
       defineCourse: function (course) {
@@ -38,12 +41,36 @@
       },
 
       addFavorite: function () {
-        console.log('Zu sendende Daten:', this.definedCourse);
-        this.$emit("favoriteAdded", {
-        data: this.definedCourse
-      });
-    }
+        if (this.checkFavorite(this.definedCourse)) {
+            return;
+        } else {
+            console.log('Zu sendende Daten:', this.definedCourse);
+            this.$emit("favoriteAdded", {
+            data: this.definedCourse
+            });
+            axios
+            .get("http://localhost:8080/favorites").then(response => {
+            this.favorites = response.data;
+            })
+            this.checkFavorite(this.definedCourse)
+        }
+      },
+
+      checkFavorite: function (course) {
+        for (let i = 0; i<this.favorites.length; i++){
+            if (course.data.id == this.favorites[i].data.data.id){
+                return true
+            }
+        }
+        return false
+      },
     },
+    mounted() {
+      axios
+      .get("http://localhost:8080/favorites").then(response => {
+          this.favorites = response.data;
+      });
+      }
     }
   </script>
   
