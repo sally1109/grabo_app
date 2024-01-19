@@ -34,60 +34,43 @@ const clientCredentials = {
   
 
   async function filter_studienangebote(filterWord) {
-      const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
-      console.log('test' , filterWord);
-      if (!filterWord) {
-          console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
-          return;
-      }
-  
-      const fullUrl = `${baseUrl}?sw=${filterWord}`;
-      ApiUrl_studienangebote = fullUrl;
-      //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
-      await makeRequest_Studienfach();
-  }
-  
-// Aufrufe um ein Wort zu filtern
- // const filterWord = "Informatik";
-  //filter_studienangebote(filterWord);
-  
+    const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
+    console.log('test' , filterWord);
+    if (!filterWord) {
+        console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
+        return;
+    }
 
-
-
-const extractedData = [];
-
-
-function extractDataInArray(data) {
-
-  extractedData.push(data);
+    const fullUrl = `${baseUrl}?sw=${filterWord}`;
+    ApiUrl_studienangebote = fullUrl;
+    //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
+    await makeRequest_Studienfach();
 }
 
+// Aufrufe um ein Wort zu filtern
+// const filterWord = "Informatik";
+//filter_studienangebote(filterWord);
+
+//Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
 async function makeRequest_Studienfach() {
-    try {
-        const response = await fetch(ApiUrl_studienangebote);
-        if (!response.ok) {
-            console.error(`Fehler beim Abrufen der Daten. Statuscode: ${response.status}`);
-            return;
-        }
-
-        const data = await response.json();
-        if (!data) {
-            console.error("Keine Daten erhalten.");
-            return;
-        }
-
-        // Hier können Sie die Daten in das Array speichern
-        extractedData.push({data});
-
-        // Beispiel: Loggen Sie das aktualisierte Array
-        console.log("Aktualisiertes Datenarray:", extractedData);
-
-        // Hier können Sie weitere Verarbeitungsschritte mit dem Array durchführen
-        // ...
-
-    } catch (error) {
-        console.error("Fehler bei der Anfrage:", error);
-    }
+console.log(ApiUrl_studienangebote);
+try {
+  const response = await axios.get(ApiUrl_studienangebote, {
+    headers: {
+      'X-API-Key': clientCredentials.client_id
+    },
+  });
+  console.log(response.data);
+  extractBundesland(response.data.items);
+  extractAbschlussgrad(response.data.items);
+  extractStudienform(response.data.items);
+  extractStudientyp(response.data.items);
+  extractStudiengangmodell(response.data.items);
+  extractHochschulart(response.data.items);
+  res.json(extractedData);
+} catch (error) {
+  console.error('Fehler bei der Anfrage:', error.message);
+}
 }
 
 
