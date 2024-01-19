@@ -4,23 +4,13 @@
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
-  <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
+  <SearchBar @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
   <showData v-if="show && extractedData.length != 0" show = false >
     <ListCourse v-for="(listedCourse, index) in extractedData" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
-    <!-- <v-card class="container" id="ListHome" v-for="(items, index) in extractedData" :key="index">
-      <div id="div_name">
-        <v-card-title @click="dialogVisible=true, defineCourse(items)"> {{ items.data.studiBezeichnung }} </v-card-title>
-          <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click="defineCourse(items), addEntry()"> 
-            <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
-            <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
-          </v-btn>
-      </div>
-      <div id="div_infos" @click="dialogVisible=true, defineCourse(items)">
-        <v-icon icon="mdi-map-marker" size="small"></v-icon>
-        <v-card-subtitle> {{ items.data.studienort.postleitzahl }} {{ items.data.studienort.ort }} </v-card-subtitle>
-      </div>
-    </v-card> -->
   </showData>
+    <div v-else id="warning">
+      <v-title> Bitte suche nach einem Studiengang, um eine Liste angezeigt zu bekommen. Auf deine Suche wird automatisch dein angegebenes Bundesland angewendet. Das kannst du im Filter ändern. </v-title>
+    </div>
   <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
 </div>
 </template>
@@ -28,7 +18,7 @@
 <script>
 
 import axios from "axios";
-import Filter from "./Filter.vue";
+import SearchBar from "./SearchBar.vue";
 import DetailsCourse from "./DetailsCourse.vue";
 import ListCourse from "./ListCourse.vue"
 
@@ -39,7 +29,7 @@ export default {
     msg: String
   },
   components: {
-    Filter,
+    SearchBar,
     DetailsCourse,
     ListCourse,
   },
@@ -192,37 +182,10 @@ span{
   padding-left: 10px;
 }
 
-#ListHome {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 10px 15px 10px 15px;
-    border-radius: 13px;
-  }
-  
-  #div_name {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  #div_infos {
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    width: 100%;
-  }
-  
-  .v-card-title {
-    padding: 0px;
-    max-width: 265px;
-    font-size: medium;
-  }
-  
-  .v-card-subtitle {
-    padding-left: 5px;
-  }
+#warning{
+  padding: 10px;
+  display: flex;
+  color: #F74E15;
+  text-align: center;
+}
 </style>

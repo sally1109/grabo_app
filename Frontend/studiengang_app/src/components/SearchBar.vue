@@ -1,8 +1,8 @@
 
 <template>
-  <div class="container" id="Filter">
+  <div class="container" id="SearchBar">
     <!-- Suchleiste -->
-    <v-text-field id="Search" v-model="searchWord" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+    <v-text-field id="Search" v-model="searchWord" variant="underlined" label="Suche einen Studiengang" :rules="[rules.required]"></v-text-field>
 
     <v-btn class="btn" id="search_btn" density="comfortable" variant="text" @click="search" icon="mdi-filter">
       <v-icon>mdi-magnify</v-icon>
@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       searchResults: [],
-      searchWord: 'Informatik',
+      searchWord: '',
       dialog: false,
       selectedParameter1: null,
       selectedParameter2: null,
@@ -108,6 +108,9 @@ export default {
       selectedParameter5: null,
       selectedParameter6: null,
       extractedData: [],
+      rules: {
+        required: value => !!value || 'Field is requiered',
+      },
     };
   },
   created() {
@@ -209,11 +212,11 @@ export default {
 </script>
   
 <style scoped>
-#Filter {
+
+#SearchBar {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 0px !important;
   padding: 10px 10px 10px 10px;
   border-radius: 13px;
   max-height: 80px;
@@ -223,9 +226,6 @@ export default {
   flex-direction: column;
   width: 100%;
   padding: 0px 21px 0px 21px;
-}
-#Filter {
-  margin-right: 10px;
 }
 #inputState {
   margin: auto;
@@ -238,12 +238,15 @@ export default {
 }
 .btn {
   border-radius: 13px;
-  margin: 5px 10px;
-  padding: 12px 15px;
+  margin: 0px;
+  padding: 5px 5px;
 }
 .v-card-title {
   padding-left: 20px;
   font-size: large;
   color: #F74E15;
+}
+.btn:active {
+  background-color: white;
 }
 </style>
