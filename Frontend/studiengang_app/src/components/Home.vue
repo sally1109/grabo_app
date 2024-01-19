@@ -5,54 +5,32 @@
   </header>
   <div class="container_pages">
   <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
-  <showData  v-if="show" show = false>
-    <v-list v-if="extractedData.length != 0">
-      <v-list-item-group>
-        <v-list-item v-for="(items, index) in extractedData" :key="index">
-          <v-list-item-content>
-            <v-list-item-title>{{ items}}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
-</showData>
-  <DetailsCourse 
-    v-model="dialogVisible"
-    :selectedCourse="defindCourse"
-    @closeDialog="closeDialog"
-    />
-  <v-card class="container" id="ListHome" v-for="course in filteredCourses" :key="course.id">
-    <div id="div_name">
-      <v-card-title @click="dialogVisible=true, defineCourse(course)"> {{ course.sfa }} </v-card-title>
-        <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click=" defineCourse(course); addEntry();"> 
-          <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
-          <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
-        </v-btn>
-    </div>
-
-    
-
-    <div id="div_infos" @click="dialogVisible=true, defineCourse(course)">
-      <v-icon icon="mdi-map-marker" size="small"></v-icon>
-      <v-card-subtitle> {{ course.orte }} </v-card-subtitle>
-      <v-card-subtitle v-if="course.abg === '0'">ohne Angabe </v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '1'">Abschlussprüfung</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '2'">Bachelor</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '3'">Diplom</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '4'">Diplom(FH)</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '10'">Master</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '12'">Staatsexamen</v-card-subtitle>
-    </div>
-  </v-card>
+  <showData v-if="show && extractedData.length != 0" show = false >
+    <ListCourse v-for="(listedCourse, index) in extractedData" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
+    <!-- <v-card class="container" id="ListHome" v-for="(items, index) in extractedData" :key="index">
+      <div id="div_name">
+        <v-card-title @click="dialogVisible=true, defineCourse(items)"> {{ items.data.studiBezeichnung }} </v-card-title>
+          <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click="defineCourse(items), addEntry()"> 
+            <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
+            <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
+          </v-btn>
+      </div>
+      <div id="div_infos" @click="dialogVisible=true, defineCourse(items)">
+        <v-icon icon="mdi-map-marker" size="small"></v-icon>
+        <v-card-subtitle> {{ items.data.studienort.postleitzahl }} {{ items.data.studienort.ort }} </v-card-subtitle>
+      </div>
+    </v-card> -->
+  </showData>
+  <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
 </div>
 </template>
 
 <script>
 
 import axios from "axios";
-import { v4 as uuidV4 } from 'uuid';
 import Filter from "./Filter.vue";
 import DetailsCourse from "./DetailsCourse.vue";
+import ListCourse from "./ListCourse.vue"
 
 
 export default {
@@ -63,11 +41,12 @@ export default {
   components: {
     Filter,
     DetailsCourse,
+    ListCourse,
   },
   data: function () {
     return {
       dialogVisible: false,
-      defindCourse: {},
+      definedCourse: [],
       listOfCourses: [],
       favoritRE : '',
       favoritORTE : '',
@@ -115,10 +94,12 @@ export default {
 
     methods: {
       defineCourse(course) {
-        this.defindCourse = course;
-        this.favoritRE = course.sfa;
-        this.favoritORTE = course.orte;
-        this.favoritID = course.id;
+        this.definedCourse = course;
+      },
+
+      openInfo(e) {
+        this.dialogVisible = true;
+        this.definedCourse = e.data;
       },
 
       closeDialog(){
@@ -128,7 +109,6 @@ export default {
 
       updateFilter(newFilterParams) {
         this.filterParams = newFilterParams;
-        console.log(newFilterParams);
       },
 
       resetFilters() {
@@ -145,9 +125,9 @@ export default {
         this.defineCourse(course);
       },
       search : function (e){
-      axios.get("http://localhost:8080/testFilter",{
+      axios.get("http://localhost:8080/search", {
         params: {
-          filterWord: e.filterWord,
+          searchWord: e.searchWord,
         }
       }).then(response => {
           console.log('Server response:', response.data.extractedData);
@@ -156,18 +136,12 @@ export default {
         })
     },
 
-    addEntry: function () {
-      console.log('Zu sendende Daten:', { name: this.favoritORTE, ort: this.favoritRE, courseId: this.favoritID });
-
+    addFavorite: function (e) {
       axios
-        .post("http://" + window.location.hostname + ":8080/favorites/", {
-          name : this.favoritRE,
-          ort : this.favoritORTE,
-          courseId : this.favoritID
-
+        .post("http://localhost:8080/favorites/", {
+          data: e.data
         })
         .then((response) => {
-          this.updateKey = uuidV4();
           console.log(response.data)
         });
     }

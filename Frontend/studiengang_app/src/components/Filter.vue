@@ -2,7 +2,7 @@
 <template>
   <div class="container" id="Filter">
     <!-- Suchleiste -->
-    <v-text-field id="Search" v-model="search_word" label="Suche nach Studiengang" variant="underlined"></v-text-field>
+    <v-text-field id="Search" v-model="searchWord" label="Suche nach Studiengang" variant="underlined"></v-text-field>
 
     <v-btn class="btn" id="search_btn" density="comfortable" variant="text" @click="search" icon="mdi-filter">
       <v-icon>mdi-magnify</v-icon>
@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       searchResults: [],
-      search_word: 'Informatik',
+      searchWord: 'Informatik',
       dialog: false,
       selectedParameter1: null,
       selectedParameter2: null,
@@ -162,7 +162,7 @@ export default {
   },*/
     search : function (){
       this.$emit("search", {
-        filterWord: this.search_word,
+        searchWord: this.searchWord,
       })
     },
 

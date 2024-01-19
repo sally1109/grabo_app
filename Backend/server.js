@@ -155,21 +155,21 @@ app.post("/fetchData", async (req, res) => {
 
 
 
-app.get("/testFilter", async (req, res) => {
-  const filterWord = req.query.filterWord;
+app.get("/search", async (req, res) => {
+  const searchWord = req.query.searchWord;
   console.log('test');
   try {
-    console.log(filterWord);
+    console.log(searchWord);
 
-    await filter_studienangebote(filterWord);
+    await filter_studienangebote(searchWord);
 
     console.log(extractedData);
     console.log('Hier wird der GET-Endpoint ausgegeben');
-    console.log(`Filter erfolgreich angewendet für: ${filterWord}`);
+    console.log(`Suche erfolgreich angewendet für: ${searchWord}`);
 
-    res.status(200).json({ message: "Filter erfolgreich angewendet", extractedData: extractedData });
+    res.status(200).json({ message: "Suche erfolgreich angewendet", extractedData: extractedData });
   } catch (error) {
-    res.status(400).json({ error: "Fehler beim Anwenden des Filters" });
+    res.status(400).json({ error: "Fehler beim Anwenden der Suche" });
   }
 })
 
@@ -237,9 +237,7 @@ app.post("/favorites", function (req, res) {
       let dataAsObject = JSON.parse(data);
       dataAsObject.push({
           id: dataAsObject.length,
-          name: req.body.name,
-          ort: req.body.ort,
-          courseId : req.body.courseId,
+          data: req.body.data
       })
       fs.writeFile(filenameFavorites, JSON.stringify(dataAsObject), () => {
         res.writeHead(200, {

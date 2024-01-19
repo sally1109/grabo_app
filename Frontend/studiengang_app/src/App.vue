@@ -37,7 +37,6 @@ header {
   position: fixed;
   z-index: 2;
   width: 100vw;
-  height: 80px;
   left: 0;
   top: 0;
   background-color: #fefcfa;
@@ -53,7 +52,7 @@ header {
 .headline_2 {
   font-size: 38px;
   font-weight: 500;
-  margin: 50px 0px 0px 43px;
+  margin: 50px 0px 20px 28px;
 }
 
 img {
