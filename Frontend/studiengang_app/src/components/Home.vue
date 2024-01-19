@@ -8,8 +8,9 @@
   <showData v-if="show && extractedData.length != 0" show = false >
     <ListCourse v-for="(listedCourse, index) in extractedData" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
   </showData>
-    <div v-else id="warning">
-      <v-title> Bitte suche nach einem Studiengang, um eine Liste angezeigt zu bekommen. Auf deine Suche wird automatisch dein angegebenes Bundesland angewendet. Das kannst du im Filter ändern. </v-title>
+    <div v-else id="warning"> 
+      Bitte suche nach einem Studiengang, um eine Liste angezeigt zu bekommen. 
+      Auf deine Suche wird automatisch dein angegebenes Bundesland angewendet. Das kannst du im Filter ändern.
     </div>
   <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
 </div>
@@ -120,7 +121,6 @@ export default {
           searchWord: e.searchWord,
         }
       }).then(response => {
-          console.log('Server response:', response.data.extractedData);
           this.show = true;
           this.extractedData = response.data.extractedData;
         })
@@ -131,9 +131,6 @@ export default {
         .post("http://localhost:8080/favorites/", {
           data: e.data
         })
-        .then((response) => {
-          console.log(response.data)
-        });
     }
     },
 
@@ -141,16 +138,12 @@ export default {
       axios
         .get("http://localhost:8080/course/").then(response => {
           this.listOfCourses = response.data;
-          console.log(this.listOfCourses);
         });
 
       axios
       .get("http://localhost:8080/data/").then(response => {
         this.daten = response.data;
-        console.log(this.daten)
         this.filterParams.parameter1 = this.daten[0].bundesland;
-        console.log(this.filterParams.parameter1)
-        console.log(this.daten[0].bundesland)
       })
     },
   }

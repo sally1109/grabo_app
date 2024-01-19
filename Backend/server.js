@@ -62,7 +62,7 @@ const clientCredentials = {
         extractedData = []
       }
 
-      for (let i = 1; i<=maxPg; i++) {
+      for (let i = 0; i<maxPg; i++) {
         const response2 = await axios.get(ApiUrl_studienangebote, {
           headers: {
             'X-API-Key': clientCredentials.client_id

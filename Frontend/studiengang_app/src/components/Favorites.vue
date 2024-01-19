@@ -7,12 +7,14 @@
     <ListFavorites v-for="(singleEntry, index) of listOfEntries.slice().reverse()" :key="index" :entry="singleEntry"
       :index="listOfEntries.length - index - 1" @favoritesRemoved="removeFavorites">
     </ListFavorites>
+    <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
   </div>
 </template>
 
 <script>
 
 import ListFavorites from "./ListFavorites.vue";
+import DetailsCourse from "./DetailsCourse.vue"
 import axios from "axios";
 
 export default {
@@ -21,7 +23,8 @@ export default {
     msg: String
   },
   components: {
-    ListFavorites
+    ListFavorites,
+    DetailsCourse
   },
   data: function () {
     return {
@@ -35,7 +38,11 @@ export default {
         .then(response => {
           this.listOfEntries = response.data;
         });
-    }
+    },
+    openInfo(e) {
+        this.dialogVisible = true;
+        this.definedCourse = e.data;
+      },
   },
   mounted() {
     axios

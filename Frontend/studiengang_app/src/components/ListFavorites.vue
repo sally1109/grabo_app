@@ -1,5 +1,5 @@
 <template>
-  <v-card class="container" id="ListFavorites">
+  <v-card class="container" id="ListFavorites"  @click="openInfo(singleEntry)">
     <div id="div_name">
       <v-card-title> {{ entry.name }} </v-card-title>
       <v-btn class="btn" id="btn_remove" density="comfortable" variant="text" icon="mdi-close" @click="removeFavorite"></v-btn>
@@ -20,7 +20,12 @@ export default {
       this.$emit("favoritesRemoved", {
         index: this.index
       });
-    }
+    },
+    openInfo: function (course) {
+        this.$emit("openInfo", {
+            data: course
+        })
+      },
   }
 }
 </script>
