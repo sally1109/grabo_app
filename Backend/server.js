@@ -32,49 +32,57 @@ const clientCredentials = {
 
   let ApiUrl_studienangebote = ""; 
   
-
+  const extractedData = [];
+  
   async function filter_studienangebote(filterWord) {
-    const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
-    console.log('test' , filterWord);
-    if (!filterWord) {
-        console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
-        return;
-    }
-
-    const fullUrl = `${baseUrl}?sw=${filterWord}`;
-    ApiUrl_studienangebote = fullUrl;
-    //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
-    await makeRequest_Studienfach();
-}
-
+      const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
+      console.log('test' , filterWord);
+      if (!filterWord) {
+          console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
+          return;
+      }
+  
+      const fullUrl = `${baseUrl}?sw=${filterWord}`;
+      ApiUrl_studienangebote = fullUrl;
+      //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
+      await makeRequest_Studienfach();
+  }
+  
 // Aufrufe um ein Wort zu filtern
-// const filterWord = "Informatik";
-//filter_studienangebote(filterWord);
+ // const filterWord = "Informatik";
+  //filter_studienangebote(filterWord);
+ 
 
-//Diese Funktion nimmt die aktuelle Url "ApiUrl_studienangebote" und gibt nur die Informationen der gelisteten Parameter aus.
-async function makeRequest_Studienfach() {
-console.log(ApiUrl_studienangebote);
-try {
-  const response = await axios.get(ApiUrl_studienangebote, {
-    headers: {
-      'X-API-Key': clientCredentials.client_id
-    },
-  });
-  console.log(response.data);
-  extractBundesland(response.data.items);
-  extractAbschlussgrad(response.data.items);
-  extractStudienform(response.data.items);
-  extractStudientyp(response.data.items);
-  extractStudiengangmodell(response.data.items);
-  extractHochschulart(response.data.items);
-  res.json(extractedData);
-} catch (error) {
-  console.error('Fehler bei der Anfrage:', error.message);
+  async function makeRequest_Studienfach() {
+    console.log(ApiUrl_studienangebote);
+    try {
+      const response = await axios.get(ApiUrl_studienangebote, {
+        headers: {
+          'X-API-Key': clientCredentials.client_id
+        },
+      });
+      console.log(response.data);
+      /*extractBundesland(response.data.items);
+      extractAbschlussgrad(response.data.items);
+      extractStudienform(response.data.items);
+      extractStudientyp(response.data.items);
+      extractStudiengangmodell(response.data.items);
+      extractHochschulart(response.data.items);*/
+      extractDataInArray(response.data.items);
+      res.json(extractedData);
+    } catch (error) {
+      console.error('Fehler bei der Anfrage:', error.message);
+    }
+  }
+
+function extractDataInArray(items){
+  items.forEach(item =>{
+    const data = item.studienangebot;
+    extractedData.push({data})
+  })
+  return extractedData;
 }
-}
-
-
-function extractBundesland(items) {
+/*function extractBundesland(items) {
   items.forEach(item => {
     const bundesland = item.studienangebot.region.label;
     const studiengang = item.studienangebot.studiBezeichnung;
@@ -129,7 +137,7 @@ function extractHochschulart(items) {
     extractedData.push({ hochschulart, studiengang });
   });
   return extractedData;
-}
+}*/
 
 //makeRequest_Studienfach();
 
