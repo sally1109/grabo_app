@@ -21,7 +21,7 @@
 import axios from "axios";
 import SearchBar from "./SearchBar.vue";
 import DetailsCourse from "./DetailsCourse.vue";
-import ListCourse from "./ListCourse.vue"
+import ListCourse from "./ListCourse.vue";
 
 
 export default {

@@ -96,7 +96,7 @@ export default {
         hochschularten: Array,
       },
 
-  data() {
+  data : function () {
     return {
       searchResults: [],
       searchWord: '',
@@ -117,39 +117,19 @@ export default {
     this.fetchDataFromBackend();
   },
 
+
   methods: {
 
-    async search() {
-      console.log("Daten aus dem Backend:", this.extractedData);
-
-      const filterParams = {
-        parameter1: this.selectedParameter1,
-        parameter2: this.selectedParameter2,
-        parameter3: this.selectedParameter3,
-        parameter4: this.selectedParameter4,
-        parameter5: this.selectedParameter5,
-        parameter6: this.selectedParameter6,
-        search_word: this.search_word,
-      };
-
-      try {
-        console.log('Ausgabe Y');
-        const response = await axios.post("http://localhost:8080/testFilter", filterParams);
-        console.log(response.data.extractedData);
-        this.searchResults = response.data;
-      } catch (error) {
-        console.error("Fehler bei der Suche:", error.message);
-      }
-    },
 
     async fetchDataFromBackend() {
       console.log('Ausgabe X');
       try {
         const response = await axios.post("http://localhost:8080/fetchData");
         console.log(response.data);
- 
+
         this.extractedData = response.data.extractedData;
         console.log(this.extractedData);
+        return response.data;
       } catch (error) {
         console.error("Fehler beim Abrufen der Daten:", error.message);
       }
@@ -185,7 +165,14 @@ export default {
       this.selectedParameter6 = null;
     },
     
-    applyFilter() {
+    async applyFilter() {
+
+      // Überprüfen, ob searchWord vorhanden ist
+      if (!this.searchWord) {
+        console.error("searchWord is required");
+        return;
+      }
+
       const filterParams = {
         parameter1: this.selectedParameter1,
         parameter2: this.selectedParameter2,
@@ -198,7 +185,51 @@ export default {
       this.$emit('filter-changed', filterParams);
       this.dialog = false;
       this.fetchDataFromBackend(filterParams);
+      
+    // Warten auf den Datenabruf
+    try {
+      await this.fetchDataFromBackend(this.extractedData);
+      this.extractedData = data.extractedData;
+      console.log(this.extractedData);
+    } catch (error) {
+      console.error("Error fetching data:", error.message);
+      // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
+      return;
+    }
+
+
+        if (this.selectedParameter1) {
+          this.extractedData.filter(item => item.data.bundesland === this.selectedParameter1);
+        }
+
+        if (this.selectedParameter2) {
+          this.extractedData.filter(item => item.data.abschluss === this.selectedParameter2);
+        }
+
+        if (this.selectedParameter3) {
+          this.extractedData.filter(item => item.data.studienformen === this.selectedParameter3);
+        }
+
+        if (this.selectedParameter4) {
+          this.extractedData.filter(item => item.data.studientypen === this.selectedParameter4);
+        }
+
+        if (this.selectedParameter5) {
+          this.extractedData.filter(item => item.data.studiengangmodelle === this.selectedParameter5);
+        }
+
+        if (this.selectedParameter6) {
+          this.extractedData.filter(item => item.data.abschlussgrade === this.selectedParameter6);
+        }
+
+        this.$emit('filter-changed', filteredData);
+        return filteredData;
     },
+
+    },
+
+
+
     setBackendData() {
           this.selectedParameter1 = this.bundeslaender;
           this.selectedParameter2 = this.abschlussgrade;
@@ -207,8 +238,8 @@ export default {
           this.selectedParameter5 = this.studiengangmodelle;
           this.selectedParameter6 = this.hochschularten;
         },
-  },
-};
+  }
+
 </script>
   
 <style scoped>
