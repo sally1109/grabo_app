@@ -45,6 +45,8 @@ export default {
       dkzIds: [],
       extractedData: [],
       show:false,
+      newArray: [],
+      filteredArray : [],
 
       filterParams: {
         parameter1: '',
@@ -59,7 +61,9 @@ export default {
     };
   },
 
+
   computed: {
+    
     filteredCourses() {
       const parameter1 = this.filterParams.parameter1;
       const parameter2 = this.filterParams.parameter2 !== null ? this.filterParams.parameter2.toString() : '';
@@ -70,6 +74,7 @@ export default {
 
       return this.listOfCourses.filter(course => {
         // Hier werden die Filterbedingungen für die Parameter überprüft
+
         return (
           course.re.includes(parameter1) &&
           course.abg.includes(parameter2) && 
@@ -100,21 +105,23 @@ export default {
 
       updateFilter(newFilterParams) {
         this.filterParams = newFilterParams;
+        
       },
 
       resetFilters() {
         console.log('resetFilters wurde aufgerufen');
-        this.filterParams.parameter1 = '';
-        this.filterParams.parameter2 = '';
-        this.filterParams.parameter3 = '';
-        this.filterParams.parameter4 = '';
-        this.filterParams.parameter5 = '';
+        this.filterParams.parameter1 = null;
+        this.filterParams.parameter2 = null;
+        this.filterParams.parameter3 = null;
+        this.filterParams.parameter4 = null;
+        this.filterParams.parameter5 = null;
         this.filterParams.parameter6 = '';
       },
       handleButtonClick(course) { 
         this.addEntry;
         this.defineCourse(course);
       },
+
       search : function (e){
       axios.get("http://localhost:8080/search", {
         params: {
@@ -123,16 +130,57 @@ export default {
       }).then(response => {
           this.show = true;
           this.extractedData = response.data.extractedData;
+        // neues Array, welches die Daten von extractedData übernehmen soll
+          this.createNewArray();
         })
+      },
+
+    //Neues Array wird mit den Daten des alten Arrays gefüllt
+    createNewArray() {
+      const newArray = this.extractedData.map(item => ({ ...item }));
+      const filteredArray = [];
+
+      this.filterParams.parameter1 = "Bayern";
+
+      for(let i = 0; i < newArray.length; i++){
+
+        if((this.filterParams.parameter1 === newArray[i].data.region.key)){
+          filteredArray[i] = newArray[i].data;
+        }
+
+        if(this.filterParams.parameter2 === newArray[i].data.abschlussgrad.id){
+          filteredArray[i] = newArray[i].data;
+        }
+
+        if(this.filterParams.parameter3 === newArray[i].data.studienform.id){
+          filteredArray[i] = newArray[i].data;
+        }
+
+        if(this.filterParams.parameter4 === newArray[i].data.studientyp.id){
+          filteredArray[i] = newArray[i].data;
+        }
+
+        /*if(this.filterParams.parameter5 === newArray[i].data.studiengangmodell.id){
+          filteredArray[i] = newArray[i].data;;
+        } */
+
+        if(this.filterParams.parameter6 === newArray[i].data.hochschulart.id){
+          filteredArray[i] = newArray[i].data;
+        } 
+       
+        
+      //return newArray;
+      }
     },
+
 
     addFavorite: function (e) {
       axios
         .post("http://localhost:8080/favorites/", {
           data: e.data
         })
-    }
     },
+    
 
     mounted() {
       axios
@@ -147,6 +195,7 @@ export default {
       })
     },
   }
+}
 
 
 

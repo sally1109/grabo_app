@@ -94,9 +94,10 @@ export default {
         studientypen: Array,
         studiengangmodelle: Array,
         hochschularten: Array,
+        selectedCourse: Object,
       },
 
-  data : function () {
+  data() {
     return {
       searchResults: [],
       searchWord: '',
@@ -124,6 +125,7 @@ export default {
     async fetchDataFromBackend() {
       console.log('Ausgabe X');
       try {
+        
         const response = await axios.post("http://localhost:8080/fetchData");
         console.log(response.data);
 
@@ -182,48 +184,11 @@ export default {
         parameter6: this.selectedParameter6,
         search_word: this.search_word,
       };
+
       this.$emit('filter-changed', filterParams);
       this.dialog = false;
       this.fetchDataFromBackend(filterParams);
       
-    // Warten auf den Datenabruf
-    try {
-      await this.fetchDataFromBackend(this.extractedData);
-      this.extractedData = data.extractedData;
-      console.log(this.extractedData);
-    } catch (error) {
-      console.error("Error fetching data:", error.message);
-      // Hier kannst du entscheiden, wie du mit dem Fehler umgehen möchtest
-      return;
-    }
-
-
-        if (this.selectedParameter1) {
-          this.extractedData.filter(item => item.data.bundesland === this.selectedParameter1);
-        }
-
-        if (this.selectedParameter2) {
-          this.extractedData.filter(item => item.data.abschluss === this.selectedParameter2);
-        }
-
-        if (this.selectedParameter3) {
-          this.extractedData.filter(item => item.data.studienformen === this.selectedParameter3);
-        }
-
-        if (this.selectedParameter4) {
-          this.extractedData.filter(item => item.data.studientypen === this.selectedParameter4);
-        }
-
-        if (this.selectedParameter5) {
-          this.extractedData.filter(item => item.data.studiengangmodelle === this.selectedParameter5);
-        }
-
-        if (this.selectedParameter6) {
-          this.extractedData.filter(item => item.data.abschlussgrade === this.selectedParameter6);
-        }
-
-        this.$emit('filter-changed', filteredData);
-        return filteredData;
     },
 
     },
