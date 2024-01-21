@@ -144,7 +144,19 @@ export default {
 
       for(let i = 0; i < newArray.length; i++){
 
-        if((this.filterParams.parameter1 === newArray[i].data.region.key)){
+        const filter_bundesland = this.filterParams.parameter1 != null|| this.filterParams.parameter1 === data.region.key;
+        const filter_abschlussgrad = !this.filterParams.parameter2 != null|| this.filterParams.parameter2 === data.abschlussgrad.id;
+        const filter_studienform = !this.filterParams.parameter3 != null|| this.filterParams.parameter3 === data.studienform.id;
+        const filter_studientyp = !this.filterParams.parameter4 != null|| this.filterParams.parameter4 === data.studientyp.id;
+        const filter_hochschulart = !this.filterParams.parameter5 != null|| this.filterParams.parameter5 === data.hochschulart.id;
+
+
+        if (filter_bundesland && filter_abschlussgrad && filter_studienform && filter_studientyp && filter_hochschulart) {
+           filteredArray[i] = newArray[i].data;
+        }
+      }
+
+        /*if((this.filterParams.parameter1 === newArray[i].data.region.key)){
           filteredArray[i] = newArray[i].data;
         }
 
@@ -160,17 +172,17 @@ export default {
           filteredArray[i] = newArray[i].data;
         }
 
-        /*if(this.filterParams.parameter5 === newArray[i].data.studiengangmodell.id){
+        if(this.filterParams.parameter5 === newArray[i].data.studiengangmodell.id){
           filteredArray[i] = newArray[i].data;;
-        } */
+        } 
 
         if(this.filterParams.parameter6 === newArray[i].data.hochschulart.id){
           filteredArray[i] = newArray[i].data;
-        } 
+        } */
        
         
       //return newArray;
-      }
+      
     },
 
 
