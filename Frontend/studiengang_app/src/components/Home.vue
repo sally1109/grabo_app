@@ -4,13 +4,20 @@
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
-  <SearchBar @filter-changed="updateFilter" @reset-filters="resetFilters" @search="search" />
-  <showData v-if="show && extractedData.length != 0" show = false >
-    <ListCourse v-for="(listedCourse, index) in extractedData" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
+  <SearchBar @filterChanged="updateFilter" @reset-filters="resetFilters" @search="search" />
+  <showData v-if="extractedData.length != 0" show = false >
+    <ListCourse v-for="(listedCourse, index) in listOfCourses" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
   </showData>
-    <div v-else id="warning"> 
+    <div v-if="searchWordRequired == true && startSearch == false" class="warning"> 
       Bitte suche nach einem Studiengang, um eine Liste angezeigt zu bekommen. 
       Auf deine Suche wird automatisch dein angegebenes Bundesland angewendet. Das kannst du im Filter ändern.
+    </div>
+    <div v-if="noFilterResults == true" class="warning"> 
+      Deine Filtereinstellungen haben keine Ergebnisse ergeben. Bitte passe diese an oder suche nach einem anderen Studiengang.
+    </div>
+    <div v-if="startSearch == true && extractedData.length == 0" class="warning"> 
+      <v-progress-circular indeterminate :size="42"></v-progress-circular>
+      Deine Suchergebnisse werden geladen.
     </div>
   <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
 </div>
@@ -39,55 +46,23 @@ export default {
       dialogVisible: false,
       definedCourse: [],
       listOfCourses: [],
-      favoritRE : '',
-      favoritORTE : '',
       daten: {},
-      dkzIds: [],
       extractedData: [],
-      show:false,
-      newArray: [],
-      filteredArray : [],
+      searchWordRequired: true,
+      filteredArray: [],
+      noFilterResults: false,
+      startSearch: false,
 
       filterParams: {
-        parameter1: '',
-        parameter2: '',
-        parameter3: '',
-        parameter4: '',
-        parameter5: '',
-        parameter6: '',
+        parameter1: null,
+        parameter2: null,
+        parameter3: null,
+        parameter4: null,
+        parameter5: null,
+        parameter6: null,
       },
-
-      isClicked: false
     };
   },
-
-
-  computed: {
-    
-    filteredCourses() {
-      const parameter1 = this.filterParams.parameter1;
-      const parameter2 = this.filterParams.parameter2 !== null ? this.filterParams.parameter2.toString() : '';
-      const parameter3 = this.filterParams.parameter3 !== null ? this.filterParams.parameter3.toString() : '';
-      const parameter4 = this.filterParams.parameter4 !== null ? this.filterParams.parameter4.toString() : '';
-      const parameter5 = this.filterParams.parameter5 !== null ? this.filterParams.parameter5.toString() : '';
-      const parameter6 = this.filterParams.parameter6 !== null ? this.filterParams.parameter6.toString() : '';
-
-      return this.listOfCourses.filter(course => {
-        // Hier werden die Filterbedingungen für die Parameter überprüft
-
-        return (
-          course.re.includes(parameter1) &&
-          course.abg.includes(parameter2) && 
-          course.sfo.includes(parameter3) &&
-          course.st.includes(parameter4) &&
-          course.smo.includes(parameter5) && 
-          course.hsa.includes(parameter6) 
-
-        );
-      });
-    },
-  },
-
     methods: {
       defineCourse(course) {
         this.definedCourse = course;
@@ -105,7 +80,8 @@ export default {
 
       updateFilter(newFilterParams) {
         this.filterParams = newFilterParams;
-        
+        console.log("Filter", this.filterParams)
+        this.checkFilter()
       },
 
       resetFilters() {
@@ -115,7 +91,7 @@ export default {
         this.filterParams.parameter3 = null;
         this.filterParams.parameter4 = null;
         this.filterParams.parameter5 = null;
-        this.filterParams.parameter6 = '';
+        this.checkFilter()
       },
       handleButtonClick(course) { 
         this.addEntry;
@@ -123,66 +99,54 @@ export default {
       },
 
       search : function (e){
-      axios.get("http://localhost:8080/search", {
-        params: {
-          searchWord: e.searchWord,
+        if (e.searchWord == null || e.searchWord == '' ) {
+          console.log("kein Suchwort")
+          this.extractedData = [];
+          this.startSearch = false;
+        } else {
+          this.extractedData = [];
+          this.startSearch = true;
+          axios.get("http://localhost:8080/search", {
+            params: {
+              searchWord: e.searchWord,
+            }
+          }).then(response => {
+              this.searchWordRequired = false;
+              this.extractedData = response.data.extractedData;
+            // Filterparameter werden gecheckt
+              this.checkFilter();
+            })
         }
-      }).then(response => {
-          this.show = true;
-          this.extractedData = response.data.extractedData;
-        // neues Array, welches die Daten von extractedData übernehmen soll
-          this.createNewArray();
-        })
       },
 
-    //Neues Array wird mit den Daten des alten Arrays gefüllt
-    createNewArray() {
-      const newArray = this.extractedData.map(item => ({ ...item }));
-      const filteredArray = [];
-
-      this.filterParams.parameter1 = "Bayern";
-
-      for(let i = 0; i < newArray.length; i++){
-
-        const filter_bundesland = this.filterParams.parameter1 != null|| this.filterParams.parameter1 === data.region.key;
-        const filter_abschlussgrad = !this.filterParams.parameter2 != null|| this.filterParams.parameter2 === data.abschlussgrad.id;
-        const filter_studienform = !this.filterParams.parameter3 != null|| this.filterParams.parameter3 === data.studienform.id;
-        const filter_studientyp = !this.filterParams.parameter4 != null|| this.filterParams.parameter4 === data.studientyp.id;
-        const filter_hochschulart = !this.filterParams.parameter5 != null|| this.filterParams.parameter5 === data.hochschulart.id;
-
-
-        if (filter_bundesland && filter_abschlussgrad && filter_studienform && filter_studientyp && filter_hochschulart) {
-           filteredArray[i] = newArray[i].data;
+    checkFilter() {
+      console.log(this.extractedData)
+      if (this.listOfCourses.length =! 0) {
+        this.listOfCourses = []
+        console.log("leeren", this.listOfCourses)
+      }
+      console.log(this.filterParams)
+      if (this.filterParams.parameter1 == null && this.filterParams.parameter2 == null && this.filterParams.parameter3 == null && this.filterParams.parameter4 == null && this.filterParams.parameter5 == null) {
+        console.log("kein Filter")
+        this.listOfCourses = this.extractedData
+        return;
+      } else {
+        console.log(this.extractedData.length)
+        for(let i = 0; i < this.extractedData.length; i++){
+          const filter_bundesland = this.filterParams.parameter1 == null || this.filterParams.parameter1 === this.extractedData[i].data.region.Key;
+          const filter_abschlussgrad = this.filterParams.parameter2 == null || this.filterParams.parameter2 == this.extractedData[i].data.abschlussgrad.id;
+          const filter_studienform = this.filterParams.parameter3 == null || this.filterParams.parameter3 == this.extractedData[i].data.studienform.id;
+          const filter_studientyp = this.filterParams.parameter4 == null || this.filterParams.parameter4 == this.extractedData[i].data.studientyp.id;
+          const filter_hochschulart = this.filterParams.parameter5 == null || this.filterParams.parameter5 == this.extractedData[i].data.hochschulart.id;
+          
+          if (filter_bundesland && filter_abschlussgrad && filter_studienform && filter_studientyp && filter_hochschulart) {
+            this.listOfCourses.push(this.extractedData[i])
+          }
+        }
+        if (this.listOfCourses.length == 0){
+          this.noFilterResults = true
         }
       }
-
-        /*if((this.filterParams.parameter1 === newArray[i].data.region.key)){
-          filteredArray[i] = newArray[i].data;
-        }
-
-        if(this.filterParams.parameter2 === newArray[i].data.abschlussgrad.id){
-          filteredArray[i] = newArray[i].data;
-        }
-
-        if(this.filterParams.parameter3 === newArray[i].data.studienform.id){
-          filteredArray[i] = newArray[i].data;
-        }
-
-        if(this.filterParams.parameter4 === newArray[i].data.studientyp.id){
-          filteredArray[i] = newArray[i].data;
-        }
-
-        if(this.filterParams.parameter5 === newArray[i].data.studiengangmodell.id){
-          filteredArray[i] = newArray[i].data;;
-        } 
-
-        if(this.filterParams.parameter6 === newArray[i].data.hochschulart.id){
-          filteredArray[i] = newArray[i].data;
-        } */
-       
-        
-      //return newArray;
-      
     },
 
 
@@ -192,20 +156,16 @@ export default {
           data: e.data
         })
     },
+
+  },
     
 
-    mounted() {
-      axios
-        .get("http://localhost:8080/course/").then(response => {
-          this.listOfCourses = response.data;
-        });
-
-      axios
-      .get("http://localhost:8080/data/").then(response => {
-        this.daten = response.data;
-        this.filterParams.parameter1 = this.daten[0].bundesland;
-      })
-    },
+  mounted() {
+    axios
+    .get("http://localhost:8080/data").then(response => {
+      this.daten = response.data;
+      this.filterParams.parameter1 = this.daten[0].bundesland; 
+    })
   }
 }
 
@@ -236,10 +196,13 @@ span{
   padding-left: 10px;
 }
 
-#warning{
+.warning{
   padding: 10px;
   display: flex;
+  flex-direction: column;
   color: #F74E15;
   text-align: center;
+  align-items: center;
+  gap: 30px;
 }
 </style>

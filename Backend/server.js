@@ -81,10 +81,6 @@ const clientCredentials = {
   }
 
 function extractDataInArray(items){
-  /* if (extractedData.length = !0) {
-    extractedData = []
-  }  */ 
-
   console.log("pg")
   items.forEach(item =>{
     const data = item.studienangebot;

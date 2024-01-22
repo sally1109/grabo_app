@@ -23,23 +23,32 @@ export default {
     }
   },
   data: ()=> ({
-    items: ['Baden-Württemberg', 'Bayern', 'Berlin', 'Brandenburg', 'Bremen', 'Hamburg', 'Hessen', 'Mecklenburg-Vorpommern', 'Niedersachsen',
-            'Nordrhein-Westfalen', 'Rheinland-Pfalz', 'Saarland', 'Sachsen', 'Sachsen-Anhalt', 'Schleswig-Holstein', 'Thüringen']
+    items: [{ title: 'Baden-Württemberg', value: 'BW' },
+            { title: 'Bayern', value: 'BY' },
+            { title: 'Berlin', value: 'BE' },
+            { title: 'Brandenburg', value: 'BB' },
+            { title: 'Hamburg', value: 'BY' },
+            { title: 'Hessen', value: 'BY' },
+            { title: 'Mecklenburg-Vorpommern', value: 'BY' },
+            { title: 'Niedersachsen', value: 'BY' },
+            { title: 'Nordrhein-Westfalen', value: 'BY' },
+            { title: 'Rheinland-Pfalz', value: 'BY' },
+            { title: 'Saarland', value: 'SL' },
+            { title: 'Sachsen', value: 'SN' },
+            { title: 'Sachsen-Anhalt', value: 'ST' },
+            { title: 'Schleswig-Holstein', value: 'SH' },
+            { title: 'Thüringen', value: 'TH' },
+            { title: 'Österreich', value: 'iA' }]
   }),
   methods: {
     changeData: function () {
       console.log(this.data)
       this.$emit("dataChanged", {
         name: this.data.name,
-        bundesland: checkBundesland(this.data.bundesland),
+        bundesland: this.data.bundesland,
         nc: this.data.nc
       });
     },
-    checkBundesland: function (bundesland) {
-       if (bundesland == "Baden-Württemberg") {
-        return "bw";
-       }
-    }
   }
 }
 </script>

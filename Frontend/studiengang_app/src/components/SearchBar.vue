@@ -18,6 +18,7 @@
         <v-card-title>Filter</v-card-title>
         <div id="filterCard">
           <v-autocomplete v-model="selectedParameter1" :items="[
+            { title: 'keine Angabe', value: null},
             { title: 'Baden-Württemberg', value: 'BW' },
             { title: 'Bayern', value: 'BY' },
             { title: 'Berlin', value: 'BE' },
@@ -36,6 +37,7 @@
             { title: 'Österreich', value: 'iA' },]" id="inputState" label="Bundesland" item-text="text"
             item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
           <v-autocomplete class="textf" v-model="selectedParameter2" :items="[
+            { title: 'keine Angabe', value: null},
             { title: 'ohne Angabe', value: '0' },
             { title: 'Abschlussprüfung', value: '1' },
             { title: 'Bachelor', value: '2' },
@@ -45,6 +47,7 @@
             { title: 'Staatsexamen', value: '12' },
           ]" id="inputState" label="Abschluss" item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
           <v-autocomplete class="textf" v-model="selectedParameter3" :items="[
+            { title: 'keine Angabe', value: null},
             { title: 'Vollzeitstudium', value: '1' },
             { title: 'Teilzeitstudium', value: '2' },
             { title: 'Wochenendveranstaltung', value: '3' },
@@ -54,18 +57,12 @@
           ]" id="inputState" label="Art des Studiums" item-value="value"
             :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
           <v-autocomplete class="textf" v-model="selectedParameter4" :items="[
+            { title: 'keine Angabe', value: null},
             { title: 'Studiengang grundständig', value: '0' },
             { title: 'Studiengang weiterführend', value: '1' },
           ]" id="inputState" label="Studiumstyp" item-value="value" :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
           <v-autocomplete class="textf" v-model="selectedParameter5" :items="[
-            { title: 'ausbildungsintegrierend', value: '1' },
-            { title: 'berufsintegrierend', value: '2' },
-            { title: 'berufsbegleitend', value: '3' },
-            { title: 'praxisintegrierend', value: '4' },
-            { title: 'Duales Studium allgemein', value: '5' },
-          ]" id="inputState" label="Studiengangmodell" item-value="value"
-            :menu-props="{ maxHeight: 200 }" variant="underlined" density="compact"></v-autocomplete>
-          <v-autocomplete class="textf" v-model="selectedParameter6" :items="[
+            { title: 'keine Angabe', value: null},
             { title: 'Berufsakademie/Duale Hochschule', value: '101' },
             { title: 'FH/FAW', value: '106' },
             { title: 'Kunst- und Musikhochschule', value: '107' },
@@ -87,20 +84,11 @@
 <script>
 import axios from "axios"
 export default {
-  props: {
-        bundeslaender: Array,
-        abschlussgrade: Array,
-        studienformen: Array,
-        studientypen: Array,
-        studiengangmodelle: Array,
-        hochschularten: Array,
-        selectedCourse: Object,
-      },
 
   data() {
     return {
       searchResults: [],
-      searchWord: '',
+      searchWord: null,
       dialog: false,
       selectedParameter1: null,
       selectedParameter2: null,
@@ -108,50 +96,21 @@ export default {
       selectedParameter4: null,
       selectedParameter5: null,
       selectedParameter6: null,
-      extractedData: [],
+      daten: [],
       rules: {
         required: value => !!value || 'Field is requiered',
       },
     };
   },
-  created() {
-    this.fetchDataFromBackend();
-  },
 
 
   methods: {
 
-
-    async fetchDataFromBackend() {
-      console.log('Ausgabe X');
-      try {
-        
-        const response = await axios.post("http://localhost:8080/fetchData");
-        console.log(response.data);
-
-        this.extractedData = response.data.extractedData;
-        console.log(this.extractedData);
-        return response.data;
-      } catch (error) {
-        console.error("Fehler beim Abrufen der Daten:", error.message);
-      }
-    },
-
-    /*async fetchDataFromBackend(filterParams) {
-    try {
-      const response = await axios.post("http://localhost:8080/fetchData", filterParams);
-      console.log(response.data); 
-    } catch (error) {
-      console.error("Fehler beim Abrufen der Daten:", error.message);
-    }
-  },*/
     search : function (){
       this.$emit("search", {
         searchWord: this.searchWord,
       })
     },
-
-
 
     openDialog() {
       this.dialog = true;
@@ -169,8 +128,8 @@ export default {
     
     async applyFilter() {
 
-      // Überprüfen, ob searchWord vorhanden ist
       if (!this.searchWord) {
+        // Überprüfen, ob searchWord vorhanden ist
         console.error("searchWord is required");
         return;
       }
@@ -182,27 +141,20 @@ export default {
         parameter4: this.selectedParameter4,
         parameter5: this.selectedParameter5,
         parameter6: this.selectedParameter6,
-        search_word: this.search_word,
       };
-
-      this.$emit('filter-changed', filterParams);
+      console.log(filterParams)
+      this.$emit('filterChanged', filterParams);
       this.dialog = false;
-      this.fetchDataFromBackend(filterParams);
-      
     },
 
     },
-
-
-
-    setBackendData() {
-          this.selectedParameter1 = this.bundeslaender;
-          this.selectedParameter2 = this.abschlussgrade;
-          this.selectedParameter3 = this.studienformen;
-          this.selectedParameter4 = this.studientypen;
-          this.selectedParameter5 = this.studiengangmodelle;
-          this.selectedParameter6 = this.hochschularten;
-        },
+    mounted() {
+    axios
+    .get("http://localhost:8080/data").then(response => {
+      this.daten = response.data;
+      this.selectedParameter1 = this.daten[0].bundesland; 
+    })
+  }
   }
 
 </script>
