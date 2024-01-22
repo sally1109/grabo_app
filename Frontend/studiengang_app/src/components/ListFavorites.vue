@@ -22,7 +22,6 @@ export default {
       });
     },
     openInfo: function (course) {
-      console.log(course);
         this.$emit("openInfo", {
             data: course.data
         })

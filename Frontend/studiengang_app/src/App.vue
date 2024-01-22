@@ -67,6 +67,7 @@ img {
 .container_pages {
   margin-top: 112px;
   margin-bottom: 17.2vh;
+  min-height: 500px
 }
 
 /* Styling Container auf den jeweiligen Seiten ---------------------- */

@@ -31,7 +31,6 @@
     methods: {
       defineCourse: function (course) {
         this.definedCourse = course;
-        console.log(this.definedCourse)
       },
 
       openInfo: function (course) {
@@ -44,7 +43,6 @@
         if (this.checkFavorite(this.definedCourse)) {
             return;
         } else {
-            console.log('Zu sendende Daten:', this.definedCourse);
             this.$emit("favoriteAdded", {
             data: this.definedCourse
             });

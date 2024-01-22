@@ -8,7 +8,7 @@
         <v-card-subtitle>Beginn: {{ selectedCourse.data.studiBeginn }}</v-card-subtitle>
         <v-card-subtitle>Studienform: {{ selectedCourse.data.studienform.label }}</v-card-subtitle>
         <v-card-subtitle>Studienfächer: {{ selectedCourse.data.studienfaecher[0] }}</v-card-subtitle>
-        <button class="btn" id="btn_close" @click="closeDialog()">Schließen</button>
+        <button class="btn" id="btn_close" @click="closeInfo()">Schließen</button>
       </div>
     </v-card>
   </v-dialog>
@@ -24,8 +24,8 @@ export default {
   },
   methods: {
 
-    closeDialog() {
-      this.$emit('closeDialog', false); // Setze dialogVisible auf false
+    closeInfo() {
+      this.$emit('closeInfo', false); 
     },
     
     show: {

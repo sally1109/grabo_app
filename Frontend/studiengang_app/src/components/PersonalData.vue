@@ -42,7 +42,6 @@ export default {
   }),
   methods: {
     changeData: function () {
-      console.log(this.data)
       this.$emit("dataChanged", {
         name: this.data.name,
         bundesland: this.data.bundesland,

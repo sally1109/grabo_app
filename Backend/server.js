@@ -38,7 +38,6 @@ const clientCredentials = {
   
   async function filter_studienangebote(filterWord) {
       const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
-      console.log('test' , filterWord);
       if (!filterWord && filterWord.length == 0) {
           console.error("Filterwort fehlt. Bitte ein gültiges Filterwort angeben.");
           return;
@@ -46,7 +45,6 @@ const clientCredentials = {
   
       const fullUrl = `${baseUrl}?sw=${filterWord}`;
       ApiUrl_studienangebote = fullUrl;
-      //console.log("Filter angewendet. Vollständige URL:", ApiUrl_studienangebote);
       await makeRequest_Studienfach();
   }
   async function makeRequest_Studienfach() {
@@ -81,7 +79,6 @@ const clientCredentials = {
   }
 
 function extractDataInArray(items){
-  console.log("pg")
   items.forEach(item =>{
     const data = item.studienangebot;
     extractedData.push({data})
@@ -109,7 +106,6 @@ app.get("/search", async (req, res) => {
   try {
     await filter_studienangebote(searchWord);
 
-    console.log('Hier wird der GET-Endpoint ausgegeben');
     console.log(`Suche erfolgreich angewendet für: ${searchWord}`);
 
     res.status(200).json({ message: "Suche erfolgreich angewendet", extractedData: extractedData });
@@ -177,7 +173,6 @@ app.delete("/favorites/:id", function (req, res) {
     });
 });
 app.post("/favorites", function (req, res) {
-    console.log('Angekommene Daten:', req.body);
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
       let dataAsObject = JSON.parse(data);
       dataAsObject.push({
