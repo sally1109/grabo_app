@@ -95,6 +95,87 @@ export default {
         );
       });
     },
+
+    openInfo: function (e) {
+      this.dialogVisible = true;
+      this.definedCourse = e.data;
+    },
+
+    closeInfo: function () {
+      this.dialogVisible = false;
+    },
+
+
+    updateFilter: function (newFilterParams) {
+      this.filterParams = newFilterParams;
+      this.checkFilter()
+    },
+
+    filterReset: function () {
+      this.filterParams.parameter1 = null;
+      this.filterParams.parameter2 = null;
+      this.filterParams.parameter3 = null;
+      this.filterParams.parameter4 = null;
+      this.filterParams.parameter5 = null;
+      this.checkFilter()
+    },
+
+    search: function (e) {
+      if (e.searchWord == null || e.searchWord == '') {
+        this.extractedData = [];
+        this.startSearch = false;
+        this.searchWordRequired = true;
+      } else {
+        this.extractedData = [];
+        this.startSearch = true;
+        axios.get("http://localhost:8080/search", {
+          params: {
+            searchWord: e.searchWord,
+          }
+        }).then(response => {
+          this.searchWordRequired = false;
+          this.extractedData = response.data.extractedData;
+          this.startSearch = false;
+          // Filterparameter werden gecheckt
+          this.checkFilter();
+        })
+      }
+    },
+
+    checkFilter() {
+      if (this.listOfCourses.length = !0) {
+        this.listOfCourses = []
+      }
+      if (this.filterParams.parameter1 == null && this.filterParams.parameter2 == null && this.filterParams.parameter3 == null && this.filterParams.parameter4 == null && this.filterParams.parameter5 == null) {
+        this.listOfCourses = this.extractedData
+        return;
+      } else {
+        for (let i = 0; i < this.extractedData.length; i++) {
+          const filter_bundesland = this.filterParams.parameter1 == null || this.filterParams.parameter1 === this.extractedData[i].data.region.Key;
+          const filter_abschlussgrad = this.filterParams.parameter2 == null || this.filterParams.parameter2 == this.extractedData[i].data.abschlussgrad.id;
+          const filter_studienform = this.filterParams.parameter3 == null || this.filterParams.parameter3 == this.extractedData[i].data.studienform.id;
+          const filter_studientyp = this.filterParams.parameter4 == null || this.filterParams.parameter4 == this.extractedData[i].data.studientyp.id;
+          const filter_hochschulart = this.filterParams.parameter5 == null || this.filterParams.parameter5 == this.extractedData[i].data.hochschulart.id;
+
+          if (filter_bundesland && filter_abschlussgrad && filter_studienform && filter_studientyp && filter_hochschulart) {
+            this.listOfCourses.push(this.extractedData[i])
+          }
+        }
+        if (this.listOfCourses.length == 0) {
+          this.noFilterResults = true
+          console.log("kein Filter")
+        }
+      }
+    },
+
+
+    addFavorite: function (e) {
+      axios
+        .post("http://localhost:8080/favorites/", {
+          data: e.data
+        })
+    },
+
   },
 
     methods: {

@@ -8,7 +8,7 @@
     <ListFavorites v-for="(singleEntry, index) of listOfEntries.slice().reverse()" :key="index" :entry="singleEntry"
       :index="listOfEntries.length - index - 1" @favoritesRemoved="removeFavorites" @openInfo="openInfo">
     </ListFavorites>
-    <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog" />
+    <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeInfo="closeInfo" />
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
       this.dialogVisible = true;
       this.definedCourse = e.data;
     },
-    closeDialog() {
+    closeInfo() {
       this.dialogVisible = false;
     },
   },

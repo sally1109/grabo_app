@@ -17,13 +17,6 @@
 <script>
 export default {
   name: "Data",
-  props: {
-    data: {
-      type: Object,
-      required: true,
-      default: {},
-    }
-  },
   data: () => ({
     items: [{ title: 'Baden-Württemberg', value: 'BW' },
     { title: 'Bayern', value: 'BY' },
