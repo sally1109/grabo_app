@@ -1,10 +1,11 @@
 <template>
- <v-dialog v-show="show">
-    <v-card class="container" id="DetailsCourse">     
+  <v-dialog v-show="show">
+    <v-card class="container" id="DetailsCourse">
       <v-card-title> {{ selectedCourse.data.studiBezeichnung }} </v-card-title>
       <div class="details">
         <v-card-subtitle>Hochschule: {{ selectedCourse.data.studienanbieter.name }}</v-card-subtitle>
-        <v-card-subtitle>Adresse: {{ selectedCourse.data.studienort.strasse}}, {{ selectedCourse.data.studienort.postleitzahl}} {{ selectedCourse.data.studienort.ort}}</v-card-subtitle>
+        <v-card-subtitle>Adresse: {{ selectedCourse.data.studienort.strasse }}, {{
+          selectedCourse.data.studienort.postleitzahl }} {{ selectedCourse.data.studienort.ort }}</v-card-subtitle>
         <v-card-subtitle>Beginn: {{ selectedCourse.data.studiBeginn }}</v-card-subtitle>
         <v-card-subtitle>Studienform: {{ selectedCourse.data.studienform.label }}</v-card-subtitle>
         <v-card-subtitle>Studienfächer: {{ selectedCourse.data.studienfaecher[0] }}</v-card-subtitle>
@@ -25,11 +26,11 @@ export default {
   methods: {
 
     closeInfo() {
-      this.$emit('closeInfo', false); 
+      this.$emit('closeInfo', false);
     },
-    
+
     show: {
-      get () {
+      get() {
         return this.value
       },
 
@@ -39,7 +40,6 @@ export default {
 </script>
 
 <style scoped>
-
 #DetailsCourse {
   display: flex;
   flex-direction: column;
@@ -55,6 +55,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 
 .v-card-title {
   padding: 5px;

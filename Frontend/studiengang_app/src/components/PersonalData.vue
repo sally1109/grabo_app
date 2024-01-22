@@ -7,7 +7,8 @@
   <div class="container">
     <h4 id="headline_data">Personal Data</h4>
     <v-text-field id="input" label="Name" v-model="data.name" variant="underlined"></v-text-field>
-    <v-autocomplete label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland" variant="underlined"></v-autocomplete>
+    <v-autocomplete label="Bundesland" :items="items" :menu-props="{ maxHeight: 200 }" v-model="data.bundesland"
+      variant="underlined"></v-autocomplete>
     <v-text-field id="input" label="NC (numerus clausus)" v-model="data.nc" variant="underlined"></v-text-field>
     <button class="btn" id="btn_change" @click="changeData">Change</button>
   </div>
@@ -23,23 +24,23 @@ export default {
       default: {},
     }
   },
-  data: ()=> ({
+  data: () => ({
     items: [{ title: 'Baden-Württemberg', value: 'BW' },
-            { title: 'Bayern', value: 'BY' },
-            { title: 'Berlin', value: 'BE' },
-            { title: 'Brandenburg', value: 'BB' },
-            { title: 'Hamburg', value: 'BY' },
-            { title: 'Hessen', value: 'BY' },
-            { title: 'Mecklenburg-Vorpommern', value: 'BY' },
-            { title: 'Niedersachsen', value: 'BY' },
-            { title: 'Nordrhein-Westfalen', value: 'BY' },
-            { title: 'Rheinland-Pfalz', value: 'BY' },
-            { title: 'Saarland', value: 'SL' },
-            { title: 'Sachsen', value: 'SN' },
-            { title: 'Sachsen-Anhalt', value: 'ST' },
-            { title: 'Schleswig-Holstein', value: 'SH' },
-            { title: 'Thüringen', value: 'TH' },
-            { title: 'Österreich', value: 'iA' }]
+    { title: 'Bayern', value: 'BY' },
+    { title: 'Berlin', value: 'BE' },
+    { title: 'Brandenburg', value: 'BB' },
+    { title: 'Hamburg', value: 'BY' },
+    { title: 'Hessen', value: 'BY' },
+    { title: 'Mecklenburg-Vorpommern', value: 'BY' },
+    { title: 'Niedersachsen', value: 'BY' },
+    { title: 'Nordrhein-Westfalen', value: 'BY' },
+    { title: 'Rheinland-Pfalz', value: 'BY' },
+    { title: 'Saarland', value: 'SL' },
+    { title: 'Sachsen', value: 'SN' },
+    { title: 'Sachsen-Anhalt', value: 'ST' },
+    { title: 'Schleswig-Holstein', value: 'SH' },
+    { title: 'Thüringen', value: 'TH' },
+    { title: 'Österreich', value: 'iA' }]
   }),
   methods: {
     changeData: function () {
@@ -77,11 +78,6 @@ h2 {
   font-weight: 500;
   color: #F74E15;
   margin-bottom: -2px;
-}
-
-span {
-  font-style: italic;
-  color: #A3A5B5;
 }
 
 #headline_data {

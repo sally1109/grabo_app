@@ -195,4 +195,5 @@ export default {
 
 .btn:active {
   background-color: white;
-}</style>
+}
+</style>

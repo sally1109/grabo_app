@@ -28,14 +28,25 @@ const clientCredentials = {
   };
   
 
-//BasisUrl wird aufgerufen und aufgeteilt. Das Suchwort (filterword) wird hinten an die Url drangehängt, und die Url in eine "fullUrl" gespeichert und zurückgegeben.
+  // Abrufen der API Daten mittels Suchwort
 
   let ApiUrl_studienangebote = ""; 
-  
-  
   let extractedData = [];
   let maxPg = 1;
   
+  app.get("/search", async (req, res) => {
+    const searchWord = req.query.searchWord;
+    try {
+      await filter_studienangebote(searchWord);
+  
+      console.log(`Suche erfolgreich angewendet für: ${searchWord}`);
+  
+      res.status(200).json({ message: "Suche erfolgreich angewendet", extractedData: extractedData });
+    } catch (error) {
+      res.status(400).json({ error: "Fehler beim Anwenden der Suche" });
+    }
+  })
+
   async function filter_studienangebote(filterWord) {
       const baseUrl = "https://rest.arbeitsagentur.de/infosysbub/studisu/pc/v1/studienangebote";
       if (!filterWord && filterWord.length == 0) {
@@ -88,37 +99,6 @@ function extractDataInArray(items){
 }
 
 
-//Hier sind Post und Get Endpunkte für die Filter
-
-app.post("/fetchData", async (req, res) => {
-  try {
-    makeRequest_Studienfach();
-    res.status(200).json({ message: "Daten erfolgreich abgerufen" });
-  } catch (error) {
-    res.status(500).json({ error: "Fehler beim Abrufen der Daten" });
-  }
-});
-
-
-
-app.get("/search", async (req, res) => {
-  const searchWord = req.query.searchWord;
-  try {
-    await filter_studienangebote(searchWord);
-
-    console.log(`Suche erfolgreich angewendet für: ${searchWord}`);
-
-    res.status(200).json({ message: "Suche erfolgreich angewendet", extractedData: extractedData });
-  } catch (error) {
-    res.status(400).json({ error: "Fehler beim Anwenden der Suche" });
-  }
-})
-
-app.get("/extractedData", function (req, res) {
-  res.json(extractedData);
-});
-
-
 //Endpoints
 app.put("/data/:id", function (req, res) {
     fs.readFile(filenameData, "utf8", function (err, data) {
@@ -151,15 +131,6 @@ app.get("/favorites", function (req, res) {
     });
 });
 
-//Api-Endpunkt zum Abrufen aller Daten
-app.get("/course", function (req, res) {
-    fs.readFile(filenameCourse, "utf8", function (err, data) {
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-        });
-        res.end(data);
-    });
-});
 app.delete("/favorites/:id", function (req, res) {
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
         let dataAsObject = JSON.parse(data);
@@ -172,6 +143,7 @@ app.delete("/favorites/:id", function (req, res) {
         });
     });
 });
+
 app.post("/favorites", function (req, res) {
     fs.readFile(filenameFavorites, "utf8", function (err, data) {
       let dataAsObject = JSON.parse(data);
@@ -187,17 +159,5 @@ app.post("/favorites", function (req, res) {
       });
     });
   });
-//Api zum Abfragen einer bestimmten Id
-app.get("/course/:id", function (req, res) {
-    fs.readFile(filenameCourse, "utf8", function (err, data) {
-        const dataAsObject = JSON.parse(data)[req.params.id];
-        res.writeHead(200, {
-            "Content-Type": "application/json",
-        });
-        res.end(JSON.stringify(dataAsObject));
-    });
-});
-
-
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`));

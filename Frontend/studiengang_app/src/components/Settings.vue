@@ -1,7 +1,8 @@
 <template>
   <header>
     <h1 class="headline_2">Einstellungen</h1>
-    <img src="https://cdn.discordapp.com/attachments/1186652965105303582/1198972537053392979/StudiFinder_Logo_Orange.png?ex=65c0d930&is=65ae6430&hm=0e6e4cbe9dd420ff1fefb13ab53065c5f7c8c2b06a3ce5fa7ee397f432ffb008&">
+    <img
+      src="https://cdn.discordapp.com/attachments/1186652965105303582/1198972537053392979/StudiFinder_Logo_Orange.png?ex=65c0d930&is=65ae6430&hm=0e6e4cbe9dd420ff1fefb13ab53065c5f7c8c2b06a3ce5fa7ee397f432ffb008&">
   </header>
   <div class="container_pages">
     <PersonalData @dataChanged="changeData" :data=daten[0]></PersonalData>
@@ -39,7 +40,7 @@ export default {
         })
         .catch(error => {
           console.error('Error updating data:', error);
-         });
+        });
     }
   },
   mounted() {

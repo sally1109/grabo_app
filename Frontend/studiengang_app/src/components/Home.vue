@@ -176,4 +176,6 @@ export default {
   align-items: center;
   gap: 30px;
 }
+
+
 </style>
