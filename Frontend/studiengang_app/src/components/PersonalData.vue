@@ -1,6 +1,7 @@
 <template>
   <div class="container" id="welcome">
     <h4>Willkomen zurück</h4>
+    <h4>bei StudiFinder</h4>
     <h2> {{ data.name }} </h2>
   </div>
   <div class="container">
