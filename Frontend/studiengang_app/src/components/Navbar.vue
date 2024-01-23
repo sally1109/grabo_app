@@ -2,22 +2,19 @@
   <div class="navbar">
     <div class="nav_buttons">
       <v-btn icon="mdi-home" size="x-large" flat>
-        <router-link to="/">
-          <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+        <router-link to="/">          
           <v-icon size="39" class="ma-n1">mdi-home</v-icon>
         </router-link>
       </v-btn>
       <div id="gap">
         <v-btn icon="history" size="x-large" flat>
-          <router-link to="/favorites">
-            <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+          <router-link to="/favorites">            
             <v-icon size="39" class="ma-n1">mdi-star-outline</v-icon>
           </router-link>
         </v-btn>
       </div>
       <v-btn icon="account" size="x-large" flat>
-        <router-link to="/settings">
-          <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+        <router-link to="/settings">          
           <v-icon size="39" class="ma-n1">mdi-account</v-icon>
         </router-link>
       </v-btn>
@@ -34,7 +31,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {
   display: flex;
