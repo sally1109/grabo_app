@@ -57,9 +57,10 @@ export default {
 
     checkFavorite: function (course) {
       axios
-          .get("http://localhost:8080/favorites").then(response => {
-            this.favorites = response.data;
-          })
+      .get("http://localhost:8080/favorites").then(response => {
+        this.favorites = response.data;
+      })
+
       for (let i = 0; i < this.favorites.length; i++) {
         if (course.data.id == this.favorites[i].data.data.id) {
           return true
@@ -68,6 +69,7 @@ export default {
       return false
     },
   },
+  
   mounted() {
     axios
       .get("http://localhost:8080/favorites").then(response => {
