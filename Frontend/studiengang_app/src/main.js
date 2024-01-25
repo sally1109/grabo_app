@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-// Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo)
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import Home from "./components/Home.vue"
@@ -31,7 +30,6 @@ const vuetify = createVuetify({
 })
 
 
-// Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo)
 const app = createApp(App).use(vuetify)
 
 createApp(App)

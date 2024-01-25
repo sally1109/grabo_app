@@ -9,7 +9,7 @@ StudiFinder
 - App ist unvollständig auf Vercel deployed. Da wir ein Backend haben, wird nichts angezeigt. 
   Wir haben versucht auf Azure die App mit Backend zu deployen. Das hat jedoch auch nicht funktioniert
 
-Link zu Vercel: https://studifinder.vercel.app/#/
+  Link zu Vercel: https://studifinder.vercel.app/#/
 
 Beschreibung: 
 - StudiFinder App fürs Smartphone -> (bitte Entwicklerumgebung auf IPhone 12 Pro (390px x 844px) stellen)
@@ -81,10 +81,10 @@ Notwendige Schritte um Vue-Anwendung zu starten:
     Frontend starten: npm run dev
 
 Falls irgendwas nicht funktioniert, diese Librarys haben wir noch im Frontend installiert:
-   Axios:    npm i axios 
-   Router.js install vue-router@4
-   Vuetify:  npm add vuetify@^3.0.1
-             npm i @mdi/font -D
+    Axios:      npm i axios 
+    Router.js   install vue-router@4
+    Vuetify:    npm add vuetify@^3.0.1
+                npm i @mdi/font -D
 
 Hilfsmittel:
-Bei Problemen, die wir selber nicht lösen konnten: ChatGPT
+    Bei Problemen, die wir selber nicht lösen konnten: ChatGPT

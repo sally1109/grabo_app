@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "morgan": "^1.10.0",
-    "uuid": "^9.0.1"
-  }
-}

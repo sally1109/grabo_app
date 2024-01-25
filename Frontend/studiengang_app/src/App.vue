@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar></Navbar>
-    <router-view></router-view> <!--  Fremdcode -> Vue JS 3 für Einsteiger #10 Routing mit dem Vue-Router (https://youtu.be/o62BwRSaEHo) -->
+    <router-view></router-view>
   </div>
 </template>
 
