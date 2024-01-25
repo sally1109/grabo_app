@@ -1,6 +1,5 @@
 
 const express = require("express");
-const morgan = require("morgan");
 const app = express();
 const fs = require("fs");
 const cors = require("cors");
@@ -17,7 +16,6 @@ function log(req, res, next) {
     next();
 }
 app.use(log);
-app.use(morgan("dev"));
 
 
 // Client Credentials für die Authentifizierung
