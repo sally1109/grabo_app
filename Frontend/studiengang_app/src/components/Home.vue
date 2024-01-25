@@ -4,42 +4,31 @@
     <!-- <img src=> TODO Logo-->
   </header>
   <div class="container_pages">
-  <Filter @filter-changed="updateFilter" @reset-filters="resetFilters" />
-  <DetailsCourse 
-    v-model="dialogVisible"
-    :selectedCourse="defindCourse"
-    @closeDialog="closeDialog"
-    />
-
-  <v-card class="container" id="ListHome" v-for="course in filteredCourses" :key="course.id">
-    <div id="div_name">
-      <v-card-title @click="dialogVisible=true, defineCourse(course)"> {{ course.sfa }} </v-card-title>
-        <v-btn class="btn" id="add_btn" density="comfortable" icon="mdi-star-outline" variant="text" @click=" defineCourse(course); addEntry();"> 
-          <v-icon size="large" v-if="isClicked"> {{ 'mdi-star'}} </v-icon>
-          <v-icon size="large" v-if="!isClicked"> {{ 'mdi-star-outline'}} </v-icon>
-        </v-btn>
+  <SearchBar @filterChanged="updateFilter" @reset-filters="resetFilters" @search="search" />
+  <showData v-if="extractedData.length != 0" show = false >
+    <ListCourse v-for="(listedCourse, index) in listOfCourses" :key="index" :listedCourse="listedCourse" @favoriteAdded="addFavorite" @openInfo="openInfo"></ListCourse>
+  </showData>
+    <div v-if="searchWordRequired == true && startSearch == false" class="warning"> 
+      Bitte suche nach einem Studiengang, um eine Liste angezeigt zu bekommen. 
+      Auf deine Suche wird automatisch dein angegebenes Bundesland angewendet. Das kannst du im Filter ändern.
     </div>
-    <div id="div_infos" @click="dialogVisible=true, defineCourse(course)">
-      <v-icon icon="mdi-map-marker" size="small"></v-icon>
-      <v-card-subtitle> {{ course.orte }} </v-card-subtitle>
-      <v-card-subtitle v-if="course.abg === '0'">ohne Angabe </v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '1'">Abschlussprüfung</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '2'">Bachelor</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '3'">Diplom</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '4'">Diplom(FH)</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '10'">Master</v-card-subtitle>
-      <v-card-subtitle v-else-if="course.abg === '12'">Staatsexamen</v-card-subtitle>
+    <div v-if="noFilterResults == true" class="warning"> 
+      Deine Filtereinstellungen haben keine Ergebnisse ergeben. Bitte passe diese an oder suche nach einem anderen Studiengang.
     </div>
-  </v-card>
+    <div v-if="startSearch == true && extractedData.length == 0" class="warning"> 
+      <v-progress-circular indeterminate :size="42"></v-progress-circular>
+      Deine Suchergebnisse werden geladen.
+    </div>
+  <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog"/>
 </div>
 </template>
 
 <script>
 
 import axios from "axios";
-import { v4 as uuidV4 } from 'uuid';
-import Filter from "./Filter.vue";
+import SearchBar from "./SearchBar.vue";
 import DetailsCourse from "./DetailsCourse.vue";
+import ListCourse from "./ListCourse.vue";
 
 
 export default {
@@ -48,122 +37,114 @@ export default {
     msg: String
   },
   components: {
-    Filter,
+    SearchBar,
     DetailsCourse,
+    ListCourse,
   },
   data: function () {
     return {
       dialogVisible: false,
-      defindCourse: {},
+      definedCourse: [],
       listOfCourses: [],
-      favoritRE : '',
-      favoritORTE : '',
       daten: {},
+      extractedData: [],
+      searchWordRequired: true,
+      filteredArray: [],
+      noFilterResults: false,
+      startSearch: false,
 
       filterParams: {
-        parameter1: '',
-        parameter2: '',
-        parameter3: '',
-        parameter4: '',
-        parameter5: '',
-        parameter6: '',
+        parameter1: null,
+        parameter2: null,
+        parameter3: null,
+        parameter4: null,
+        parameter5: null,
+        parameter6: null,
       },
-
-      isClicked: false
     };
   },
+    methods: {
+      defineCourse(course) {
+        this.definedCourse = course;
+      },
 
-  computed: {
-    filteredCourses() {
-      const parameter1 = this.filterParams.parameter1;
-      const parameter2 = this.filterParams.parameter2 !== null ? this.filterParams.parameter2.toString() : '';
-      const parameter3 = this.filterParams.parameter3 !== null ? this.filterParams.parameter3.toString() : '';
-      const parameter4 = this.filterParams.parameter4 !== null ? this.filterParams.parameter4.toString() : '';
-      const parameter5 = this.filterParams.parameter5 !== null ? this.filterParams.parameter5.toString() : '';
-      const parameter6 = this.filterParams.parameter6 !== null ? this.filterParams.parameter6.toString() : '';
+      openInfo(e) {
+        this.dialogVisible = true;
+        this.definedCourse = e.data;
+      },
 
-      return this.listOfCourses.filter(course => {
-        // Hier werden die Filterbedingungen für die Parameter überprüft
-        return (
-          course.re.includes(parameter1) &&
-          course.abg.includes(parameter2) && 
-          course.sfo.includes(parameter3) &&
-          course.st.includes(parameter4) &&
-          course.smo.includes(parameter5) && 
-          course.hsa.includes(parameter6) 
-
-        );
-      });
-    },
-
-    openInfo: function (e) {
-      this.dialogVisible = true;
-      this.definedCourse = e.data;
-    },
-
-    closeInfo: function () {
-      this.dialogVisible = false;
-    },
+      closeDialog(){
+        this.dialogVisible = false;
+      },
 
 
-    updateFilter: function (newFilterParams) {
-      this.filterParams = newFilterParams;
-      this.checkFilter()
-    },
+      updateFilter(newFilterParams) {
+        this.filterParams = newFilterParams;
+        console.log("Filter", this.filterParams)
+        this.checkFilter()
+      },
 
-    filterReset: function () {
-      this.filterParams.parameter1 = null;
-      this.filterParams.parameter2 = null;
-      this.filterParams.parameter3 = null;
-      this.filterParams.parameter4 = null;
-      this.filterParams.parameter5 = null;
-      this.checkFilter()
-    },
+      resetFilters() {
+        console.log('resetFilters wurde aufgerufen');
+        this.filterParams.parameter1 = null;
+        this.filterParams.parameter2 = null;
+        this.filterParams.parameter3 = null;
+        this.filterParams.parameter4 = null;
+        this.filterParams.parameter5 = null;
+        this.checkFilter()
+      },
+      handleButtonClick(course) { 
+        this.addEntry;
+        this.defineCourse(course);
+      },
 
-    search: function (e) {
-      if (e.searchWord == null || e.searchWord == '') {
-        this.extractedData = [];
-        this.startSearch = false;
-        this.searchWordRequired = true;
-      } else {
-        this.extractedData = [];
-        this.startSearch = true;
-        axios.get("http://localhost:8080/search", {
-          params: {
-            searchWord: e.searchWord,
-          }
-        }).then(response => {
-          this.searchWordRequired = false;
-          this.extractedData = response.data.extractedData;
+      search : function (e){
+        if (e.searchWord == null || e.searchWord == '' ) {
+          console.log("kein Suchwort")
+          this.extractedData = [];
           this.startSearch = false;
-          // Filterparameter werden gecheckt
-          this.checkFilter();
-        })
-      }
-    },
+        } else {
+          this.extractedData = [];
+          this.startSearch = true;
+          axios.get("http://localhost:8080/search", {
+            params: {
+              searchWord: e.searchWord,
+            }
+          }).then(response => {
+              this.searchWordRequired = false;
+              this.extractedData = response.data.extractedData;
+            // Filterparameter werden gecheckt
+              this.checkFilter();
+            })
+        }
+      },
 
     checkFilter() {
-      if (this.listOfCourses.length = !0) {
+      console.log(this.extractedData)
+      if (this.listOfCourses.length =! 0) {
         this.listOfCourses = []
+        console.log("leeren", this.listOfCourses)
       }
+      console.log(this.filterParams)
       if (this.filterParams.parameter1 == null && this.filterParams.parameter2 == null && this.filterParams.parameter3 == null && this.filterParams.parameter4 == null && this.filterParams.parameter5 == null) {
+        console.log("kein Filter")
         this.listOfCourses = this.extractedData
         return;
       } else {
-        for (let i = 0; i < this.extractedData.length; i++) {
+        console.log(this.extractedData.length)
+        for(let i = 0; i < this.extractedData.length; i++){
           const filter_bundesland = this.filterParams.parameter1 == null || this.filterParams.parameter1 === this.extractedData[i].data.region.Key;
           const filter_abschlussgrad = this.filterParams.parameter2 == null || this.filterParams.parameter2 == this.extractedData[i].data.abschlussgrad.id;
           const filter_studienform = this.filterParams.parameter3 == null || this.filterParams.parameter3 == this.extractedData[i].data.studienform.id;
           const filter_studientyp = this.filterParams.parameter4 == null || this.filterParams.parameter4 == this.extractedData[i].data.studientyp.id;
           const filter_hochschulart = this.filterParams.parameter5 == null || this.filterParams.parameter5 == this.extractedData[i].data.hochschulart.id;
-
+          
           if (filter_bundesland && filter_abschlussgrad && filter_studienform && filter_studientyp && filter_hochschulart) {
             this.listOfCourses.push(this.extractedData[i])
           }
         }
-        if (this.listOfCourses.length == 0) {
+        if (this.listOfCourses.length == 0){
           this.noFilterResults = true
-          console.log("kein Filter")
         }
       }
     },
@@ -177,84 +158,16 @@ export default {
     },
 
   },
+    
 
-    methods: {
-      defineCourse(course) {
-        this.defindCourse = course;
-        this.favoritRE = course.sfa;
-        this.favoritORTE = course.orte;
-        this.favoritID = course.id;
-      },
-
-      closeDialog(){
-        this.dialogVisible = false;
-      },
-
-
-      updateFilter(newFilterParams) {
-        this.filterParams = newFilterParams;
-        console.log(newFilterParams);
-      },
-
-      resetFilters() {
-        console.log('resetFilters wurde aufgerufen');
-        this.filterParams.parameter1 = '';
-        this.filterParams.parameter2 = '';
-        this.filterParams.parameter3 = '';
-        this.filterParams.parameter4 = '';
-        this.filterParams.parameter5 = '';
-        this.filterParams.parameter6 = '';
-      },
-
-      addRemoveFavorite() {
-        this.isClicked = !this.isClicked;
-        console.log(this.isClicked);
-        if (this.isClicked == true){
-          console.log(this.isClicked)
-        } else {
-          console.log(this.isClicked)
-        }
-      },
-    handleButtonClick(course) { 
-      this.addEntry;
-      this.defineCourse(course);
-      
-
-    },
-
-    addEntry: function () {
-      console.log('Zu sendende Daten:', { name: this.favoritORTE, ort: this.favoritRE, courseId: this.favoritID });
-
-      axios
-        .post("http://" + window.location.hostname + ":8080/favorites/", {
-          name : this.favoritRE,
-          ort : this.favoritORTE,
-          courseId : this.favoritID
-
-        })
-        .then((response) => {
-          this.updateKey = uuidV4();
-          console.log(response.data)
-        });
-    },
-    },
-
-    mounted() {
-      axios
-        .get("http://localhost:8080/course/").then(response => {
-          this.listOfCourses = response.data;
-          console.log(this.listOfCourses);
-        });
+  mounted() {
     axios
-      .get("http://localhost:8080/data/").then(response => {
-        this.daten = response.data;
-        console.log(this.daten)
-        this.filterParams.parameter1 = this.daten[0].bundesland;
-        console.log(this.filterParams.parameter1)
-        console.log(this.daten[0].bundesland)
-      })
-    },
+    .get("http://localhost:8080/data").then(response => {
+      this.daten = response.data;
+      this.filterParams.parameter1 = this.daten[0].bundesland; 
+    })
   }
+}
 
 
 
@@ -283,37 +196,13 @@ span{
   padding-left: 10px;
 }
 
-#ListHome {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-    padding: 10px 15px 10px 15px;
-    border-radius: 13px;
-  }
-  
-  #div_name {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  #div_infos {
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    width: 100%;
-  }
-  
-  .v-card-title {
-    padding: 0px;
-    max-width: 265px;
-    font-size: medium;
-  }
-  
-  .v-card-subtitle {
-    padding-left: 5px;
-  }
+.warning{
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  color: #F74E15;
+  text-align: center;
+  align-items: center;
+  gap: 30px;
+}
 </style>

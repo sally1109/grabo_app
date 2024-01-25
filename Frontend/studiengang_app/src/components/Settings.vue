@@ -47,6 +47,7 @@ export default {
     axios
       .get("http://localhost:8080/data/").then(response => {
         this.daten = response.data;
+        console.log(daten)
       });
   }
 }
