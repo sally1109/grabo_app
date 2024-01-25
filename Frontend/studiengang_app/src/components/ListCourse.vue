@@ -51,16 +51,15 @@ export default {
         this.$emit("favoriteAdded", {
           data: this.definedCourse
         })
-        axios
-          .get("http://localhost:8080/favorites").then(response => {
-            this.favorites = response.data;
-            console.log(this.favorites[this.favorites.length-1])
-            this.checkFavorite(this.definedCourse)
-          })
+        this.checkFavorite(this.definedCourse)
       }
     },
 
     checkFavorite: function (course) {
+      axios
+          .get("http://localhost:8080/favorites").then(response => {
+            this.favorites = response.data;
+          })
       for (let i = 0; i < this.favorites.length; i++) {
         if (course.data.id == this.favorites[i].data.data.id) {
           return true
