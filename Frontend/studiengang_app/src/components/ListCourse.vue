@@ -41,18 +41,22 @@ export default {
       })
     },
 
-    addFavorite: function () {
+    addFavorite: async function () {
+      console.log(this.checkFavorite(this.definedCourse))
       if (this.checkFavorite(this.definedCourse)) {
+        console.log("if")
         return;
       } else {
+        console.log("push")
         this.$emit("favoriteAdded", {
           data: this.definedCourse
-        });
+        })
         axios
           .get("http://localhost:8080/favorites").then(response => {
             this.favorites = response.data;
+            console.log(this.favorites[this.favorites.length-1])
+            this.checkFavorite(this.definedCourse)
           })
-        this.checkFavorite(this.definedCourse)
       }
     },
 
