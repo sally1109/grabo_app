@@ -21,7 +21,7 @@
       <v-progress-circular indeterminate :size="42"></v-progress-circular>
       Deine Suchergebnisse werden geladen.
     </div>
-    <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeDialog="closeDialog" />
+    <DetailsCourse v-model="dialogVisible" :selectedCourse="definedCourse" @closeInfo="closeInfo" />
   </div>
 </template>
 
@@ -75,7 +75,7 @@ export default {
       this.definedCourse = e.data;
     },
 
-    closeDialog() {
+    closeInfo() {
       this.dialogVisible = false;
     },
 
